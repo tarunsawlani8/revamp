@@ -2,6 +2,7 @@ package com.amaropticals.restcontroller;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,14 +52,15 @@ public class InvoiceController {
 				request.getName(), request.getEmail(), request.getContact(),
 				Date.valueOf(request.getDeliveryDate()),
 				request.getTotalAmount(), request.getInitialAmount(),
-				Timestamp.valueOf(request.getUpdateDate()),
-				request.getJsonFileName());
+				Timestamp.valueOf(LocalDateTime.now()),
+				request.getInvoiceId()+".json");
 		JSONFileHandler.writeJsonFile("C:/Users/Sonu/Desktop/invoices", String.valueOf(request.getInvoiceId()).substring(0, 6),
 				request.getJsonFileName(), request);
 		updateStocks(request);
 
 		CreateInvoiceResponse response = new CreateInvoiceResponse();
 		response.setStatus("success");
+		response.setResponse(request);
 		return response;
 	}
 
@@ -73,10 +75,11 @@ public class InvoiceController {
 	private void updateStocks(CreateInvoiceRequest request) {
 		LOGGER.info("Updating stocks for invoiceId={}", request.getInvoiceId());
 		int taskCount = 1;
-		for (ItemModel item : request.getItemsList()) {
+		for (ItemModel item : request.getPurchaseItems()) {
 			if (item.isLensActive()) {
 				TaskModel model = new TaskModel();
 				model.setTaskId(request.getInvoiceId() + "-" + taskCount);
+				item.setTaskId(request.getInvoiceId() + "-" + taskCount);
 				model.setTaskStatus(AOConstants.TASK_IN_PROGRESS);
 				model.setDeliveryDate(item.getDeliveryDate());
 				model.setUpdateTime(request.getDeliveryDate());
@@ -86,7 +89,7 @@ public class InvoiceController {
 
 			AddOrUpdateStockRequest model = new AddOrUpdateStockRequest();
 			model.setProductId(item.getProductId());
-			model.setQuantity(-item.getQuantity());
+			model.setQuantity(-item.getBuyQuantity());
 			model.setReason("Invoice");
 			model.setRefId(String.valueOf(request.getInvoiceId()));
 			model.setUpdateDate(request.getUpdateDate());

@@ -116,52 +116,79 @@
       
  	
       
-      mainApp.controller('AddStudentController', function($scope) {
+      mainApp.controller('AddStudentController', function($scope, $http) {
          $scope.message = "This page will be used to display add student form";
+         $scope.invoiceModel = {
+  	            name: null,
+  	            contact: null,
+  	            cmail: null,
+  	            totalAmount: 0,
+  	            pendingAmount: null,
+  	            initialAmount: null,
+  	            referredBy : null,
+  	            deliveryDate : null,
+  	            purchaseItems: []
+  	        };
          
+         
+         $http({method : "GET",
+  		   url :"/stocks/getAllStocks", 
+  		 
+  		   headers : {
+  			'Content-Type' : 'application/json'   
+  		   }
+  		   }
+  		   ).success(function (response) {
+  				 
+  		
+  			 // if (response.statusMessage == 'success') {
+  			   $scope.stocks = response;
+  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+  			//   $('#successMsg').show();
+  			 //  } 
+  			   
+  		   }).error(function(error, status){
+  			  
+  				//   $('#errorMsg').show();
+  		   });
          $scope.stocks= [
-    		 {"productId": "1",
-    			 "productName" : "Half Frame",
-    				 "productDesc" : "500-100 Half Frame"
-    			 },
-    			 {"productId": "2",
-        			 "productName" : "Full Frame",
-        				 "productDesc" : "1000-3400  Frame"
-        			 },
-        			 {"productId": "10",
-            			 "productName" : "FUll Frame",
-            				 "productDesc" : "500-100 Full Frame"
-            			 },
-            			 {"productId": "200",
-                			 "productName" : "Frame Less",
-                				 "productDesc" : "500-100 Frame Less"
-                			 }
     	 ];
+     
          
-         $scope.purchaseItems = [];
+         $scope.invoiceModel.purchaseItems = [];
          
-         $scope.tempItem = {};
          
          $scope.pushToTemp = function(ind) {
-     		$scope.purchaseItems.push(ind);
+        	 
+        	 if ($scope.invoiceModel.purchaseItems.indexOf(ind) !==-1) {
+        		 
+        		 var index = $scope.invoiceModel.purchaseItems.indexOf(ind);
+        		 var xx = $scope.invoiceModel.purchaseItems[index].buyQuantity;
+        		 $scope.invoiceModel.purchaseItems[index].buyQuantity = parseInt(xx)+1;
+
+        	return;
+        	 } 
+        	 
+     		$scope.invoiceModel.purchaseItems.push(ind);
 
      	};
+     	
+     	
      	
      	$scope.calculateCost = function(x) {
      		
      		
-     		x.totalCost = x.quantity * x.unitPrice;
-     		console.log(x.totalCost);
+     		x.totalCost = x.buyQuantity * x.unitPrice;
+     	//	console.log(x.totalCost);
      	};
      	
-     
-     	
+    //	
     	$scope.calculateTotalAmount = function() {
-    		$scope.totalAmount = 0;	
-    	     angular.forEach($scope.purchaseItems, function(item) {
-    	    	 $scope.totalAmount= $scope.totalAmount+ item.totalCost;   
+    		$scope.invoiceModel.totalAmount = 0;	
+    	     angular.forEach($scope.invoiceModel.purchaseItems, function(item) {
+    	    	 $scope.invoiceModel.totalAmount= $scope.invoiceModel.totalAmount+ item.totalCost;   
     	    	});
-    		return $scope.totalAmount;
+    		return $scope.invoiceModel.totalAmount;
     	//	console.log("cal"+x.totalCost);
     	//	console.log("total Amount"+$scope.totalAmount);
      	
@@ -169,14 +196,61 @@
      	};
      	
 $scope.calculatePendingAmount = function(initialAmount) {
+	//console.log("total Amount"+$scope.initialAmount);
+	
+ 	$scope.invoiceModel.pendingAmount= 0;
+		if (!isNaN(initialAmount)) {
+		
 			
-    		if ($scope.totalAmount <initialAmount) { 	
+    		if ($scope.invoiceModel.totalAmount <parseInt(initialAmount)) { 	
     			alert("Initial Amount annot be greater than Total Amount");
      	} 
     		
-    		return $scope.totalAmount - initialAmount;
-};
-     	
+    	return 	$scope.invoiceModel.pendingAmount= parseInt($scope.invoiceModel.totalAmount) - parseInt(initialAmount);
+
+    		
+    		
+		}};
+		
+		$scope.deleteItem = function(index) {
+			$scope.invoiceModel.purchaseItems.splice(index, 1);
+		};
+		
+		$scope.isDisabled = false;
+		
+		$scope.backToHome= function() {
+			
+			$http.get("/#/createInvoice");
+		}
+		
+$scope.createInvoice = function(invoiceModel) {
+			
+			console.log("input"+invoiceModel);
+			$http({method : "POST",
+		  		   url :"/invoices/createInvoice",
+		  		   data : invoiceModel,
+		  		 
+		  		   headers : {
+		  			'Content-Type' : 'application/json'   
+		  		   }
+		  		   }
+		  		   ).success(function (response) {
+		  				 
+		  		console.log(response);
+		  			 if (response.status == 'success') {
+		  			//   $scope.stocks = response;
+		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+		  			//   $('#successMsg').show();
+		  			
+		  			$scope.isDisabled = true;
+		  			$scope.invoiceModel = response.response;
+		  			  } 
+		  			   
+		  		   }).error(function(error, status){
+		  			  
+		  				//   $('#errorMsg').show();
+		  		   });
+		};
      	
       });
       

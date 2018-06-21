@@ -3,7 +3,7 @@ package com.amaropticals.model;
 public class ItemModel {
 	
 	private int productId;
-	private int quantity;
+	private int buyQuantity;
 	private String productName;
 	private String taskId;
 	private String deliveryDate;
@@ -16,11 +16,11 @@ public class ItemModel {
 	public void setProductId(int productId) {
 		this.productId = productId;
 	}
-	public int getQuantity() {
-		return quantity;
+	public int getBuyQuantity() {
+		return buyQuantity;
 	}
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+	public void setBuyQuantity(int quantity) {
+		this.buyQuantity = quantity;
 	}
 	public String getProductName() {
 		return productName;

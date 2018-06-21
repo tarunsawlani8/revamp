@@ -21,7 +21,7 @@ public class CreateInvoiceRequest {
 	public void setJsonFileName(String jsonFileName) {
 		this.jsonFileName = jsonFileName;
 	}
-	private List<ItemModel> itemsList;
+	private List<ItemModel> purchaseItems;
 	public long getInvoiceId() {
 		return invoiceId;
 	}
@@ -82,11 +82,11 @@ public class CreateInvoiceRequest {
 	public void setPendingAmount(String pendingAmount) {
 		this.pendingAmount = pendingAmount;
 	}
-	public List<ItemModel> getItemsList() {
-		return itemsList;
+	public List<ItemModel> getPurchaseItems() {
+		return purchaseItems;
 	}
-	public void setItemsList(List<ItemModel> itemsList) {
-		this.itemsList = itemsList;
+	public void setPurchaseItems(List<ItemModel> itemsList) {
+		this.purchaseItems = itemsList;
 	}
 	
 	

@@ -1,6 +1,7 @@
 package com.amaropticals.restcontroller;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -80,7 +81,7 @@ public class StockController {
 		String sql = "UPDATE opticals_stocks SET product_qty= ? ,update_timestamp=?  WHERE product_id=?";
 		stocksDAO.addOrUpdateStocks(sql,
 				model.getQuantity() + request.getQuantity(),
-				Timestamp.valueOf(request.getUpdateDate()),
+				Timestamp.valueOf(LocalDateTime.now()),
 				request.getProductId());
 
 		model.setQuantity(model.getQuantity() + request.getQuantity());
@@ -92,7 +93,7 @@ public class StockController {
 		log.setUser(request.getUser());
 
 		model.getStockLogsList().add(log);
-		JSONFileHandler.writeJsonFile("C:/Users/Sonu/Desktop", "",
+		JSONFileHandler.writeJsonFile("C:/Users/Sonu/Desktop/stocks", "",
 				model.getJsonFileName(), model);
 
 		LOGGER.info(
