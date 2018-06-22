@@ -1,5 +1,7 @@
 package com.amaropticals.model;
 
+import java.util.List;
+
 public class ItemModel {
 	
 	private int productId;
@@ -10,6 +12,10 @@ public class ItemModel {
 	private boolean lensActive;
 	private String purchaseCode;
 	private double unitPrice;
+	
+	private List<LensModel> leftEye;
+	private List<LensModel> rightEye;
+	
 	public int getProductId() {
 		return productId;
 	}
@@ -57,6 +63,18 @@ public class ItemModel {
 	}
 	public void setUnitPrice(double unitPrice) {
 		this.unitPrice = unitPrice;
+	}
+	public List<LensModel> getLeftEye() {
+		return leftEye;
+	}
+	public void setLeftEye(List<LensModel> leftEye) {
+		this.leftEye = leftEye;
+	}
+	public List<LensModel> getRightEye() {
+		return rightEye;
+	}
+	public void setRightEye(List<LensModel> rightEye) {
+		this.rightEye = rightEye;
 	}
 	
 	

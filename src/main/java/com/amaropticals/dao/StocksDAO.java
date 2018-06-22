@@ -41,6 +41,13 @@ public class StocksDAO {
 		return list;
 
 	}
+	
+	public List<String> query(String sql) {
+
+		List<String> list = jdbcTemplate.queryForList(sql,  String.class);
+		return list;
+
+	}
 
 	public String addOrUpdateStocks(String sql, Object... model) {
 

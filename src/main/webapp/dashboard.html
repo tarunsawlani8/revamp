@@ -33,6 +33,7 @@
     
       <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="../../resources/demos/style.css">
+    
   
   </head>
 
@@ -57,12 +58,32 @@
             
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Invoice<span class="caret"></span></a>
               <ul class="dropdown-menu">
-                      <li><a href="#createInvoice.html">Add Invoice</a></li>
+                      <li><a href="#/createInvoice">Add Invoice</a></li>
                 <li><a href="searchorders.html">View Invoice</a></li>
                 
               </ul>
             
             </li>
+             <li class="dropdown">
+            
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Stocks<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                      <li><a href="#/addStock">Add Stock</a></li>
+                <li><a href="#/updateStock">Update Stock</a></li>
+                
+              </ul>
+            
+            </li>
+             <li class="dropdown">
+            
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tasks<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                      <li><a href="#/searchTask.html">Search Task</a></li>
+                
+              </ul>
+            
+            </li>
+            
             <li class="active" style="align:right;"><a href="#about">Hello</a></li>
 			<li ><a  href="home.html" style="align:right;">Logout</a></li>
      
@@ -71,7 +92,7 @@
       </div>
     </nav>
 	<div ng-view></div>
-      
+	
     
     <!-- /container -->
 
@@ -101,22 +122,27 @@
          
          when('/createInvoice', {
             templateUrl: 'createInvoice.html',
-            controller: 'AddStudentController'
+            controller: 'AddInvoiceController'
          }).
          
-         when('/viewStudents', {
-            templateUrl: 'viewStudents.htm',
-            controller: 'ViewStudentsController'
-         }).
+         when('/addStock', {
+             templateUrl: 'addStock.html',
+             controller: 'AddStockController'
+          }).
+          when('/updateStock', {
+              templateUrl: 'updateStock.html',
+              controller: 'UpdateStockController'
+           }).
          
          otherwise({
             redirectTo: '/createInvoice'
          });
       }]);
       
- 	
+ 	</script>
       
-      mainApp.controller('AddStudentController', function($scope, $http) {
+    <script>  
+      mainApp.controller('AddInvoiceController', function($scope, $http) {
          $scope.message = "This page will be used to display add student form";
          $scope.invoiceModel = {
   	            name: null,
@@ -131,8 +157,48 @@
   	        };
          
          
+         $scope.productTypes = [];
+         
          $http({method : "GET",
-  		   url :"/stocks/getAllStocks", 
+    		   url :"/stocks/getStocksType", 
+    		 
+    		   headers : {
+    			'Content-Type' : 'application/json'   
+    		   }
+    		   }
+    		   ).success(function (response) {
+    				 
+    		
+    			 // if (response.statusMessage == 'success') {
+    			   $scope.productTypes = response;
+    			   $scope.productTypes.push("LENS");
+    			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+    			//   $('#successMsg').show();
+    			 //  } 
+    			   
+    		   }).error(function(error, status){
+    			  
+    				//   $('#errorMsg').show();
+    		   });
+         
+    
+         
+         
+         $scope.showLensStock = false;
+         $scope.loadStocksByType = function(type) {
+        	 
+        	 if ("LENS" == type) {
+        		 
+        		 
+        		 $scope.showLensStock = true;
+        		 return;
+        	 }
+        	 
+        	 $scope.showLensStock = false;
+        	 
+        	 
+         $http({method : "GET",
+  		   url :"/stocks/getStocksbyType/"+type, 
   		 
   		   headers : {
   			'Content-Type' : 'application/json'   
@@ -151,6 +217,8 @@
   			  
   				//   $('#errorMsg').show();
   		   });
+         };
+         
          $scope.stocks= [
     	 ];
      
@@ -212,6 +280,23 @@ $scope.calculatePendingAmount = function(initialAmount) {
     		
 		}};
 		
+		$scope.lensRecordExists= false;
+		
+		$scope.lensModel = {"lensActive": true,
+				"leftEye": [],
+				"rightEye": []
+		};
+		
+		$scope.pushToList = function(purchaseModel) 
+		{	console.log(purchaseModel);
+			$scope.invoiceModel.purchaseItems.push(purchaseModel);
+			$scope.lensRecordExists= true;
+			$scope.lensModel = {"lensActive": true,
+					"leftEye": [],
+					"rightEye": []
+			};
+		};
+		
 		$scope.deleteItem = function(index) {
 			$scope.invoiceModel.purchaseItems.splice(index, 1);
 		};
@@ -221,11 +306,10 @@ $scope.calculatePendingAmount = function(initialAmount) {
 		$scope.backToHome= function() {
 			
 			$http.get("/#/createInvoice");
-		}
+		};
 		
 $scope.createInvoice = function(invoiceModel) {
 			
-			console.log("input"+invoiceModel);
 			$http({method : "POST",
 		  		   url :"/invoices/createInvoice",
 		  		   data : invoiceModel,
@@ -258,9 +342,130 @@ $scope.createInvoice = function(invoiceModel) {
      
  
       
-      mainApp.controller('ViewStudentsController', function($scope) {
-         $scope.message = "This page will be used to display all the students";
+      mainApp.controller('UpdateStockController', function($scope, $http) {
+    	   $scope.productTypes = [];
+           
+           $http({method : "GET",
+      		   url :"/stocks/getStocksType", 
+      		 
+      		   headers : {
+      			'Content-Type' : 'application/json'   
+      		   }
+      		   }
+      		   ).success(function (response) {
+      				 
+      		
+      			 // if (response.statusMessage == 'success') {
+      			   $scope.productTypes = response;
+
+      			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+      			//   $('#successMsg').show();
+      			 //  } 
+      			   
+      		   }).error(function(error, status){
+      			  
+      				//   $('#errorMsg').show();
+      		   });
+           
+      
+           
+    	  
+    	  
+         $scope.isDisabled = false;
+         
+         $scope.stockModel = {};
+         
+         $scope.loadStocksByType = function(type) {
+        	 
+         $http({method : "GET",
+  		   url :"/stocks/getStocksbyType/"+type, 
+  		 
+  		   headers : {
+  			'Content-Type' : 'application/json'   
+  		   }
+  		   }
+  		   ).success(function (response) {
+  				 
+  		
+  			 // if (response.statusMessage == 'success') {
+  			   $scope.stocks = response;
+  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+  			//   $('#successMsg').show();
+  			 //  } 
+  			   
+  		   }).error(function(error, status){
+  			  
+  				//   $('#errorMsg').show();
+  		   });
+         };
+         
+         $scope.stockModel= {};
+         $scope.pushToEdit = function(model) {
+        	 $scope.stockModel=model;
+         };
+         
+         $scope.updateStock = function(stockModel) {
+        	 $http({method : "POST",
+		  		   url :"/stocks/updateStocks",
+		  		   data : stockModel,
+		  		 
+		  		   headers : {
+		  			'Content-Type' : 'application/json'   
+		  		   }
+		  		   }
+		  		   ).success(function (response) {
+		  				 
+		  			 if (response.status == 'success') {
+		  			//   $scope.stocks = response;
+		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+		  			//   $('#successMsg').show();
+		  			
+		  			$scope.isDisabled = true;
+		  			$scope.stockModel = response.model;
+		  			  } 
+		  			   
+		  		   }).error(function(error, status){
+		  			  
+		  				//   $('#errorMsg').show();
+		  		   });
+        	 
+        	 
+         }
       });
+      
+      mainApp.controller('AddStockController', function($scope, $http) {
+          $scope.isDisabled = false;
+          
+          $scope.stockModel = {};
+          
+          $scope.addStock = function(stockModel) {
+         	 $http({method : "POST",
+ 		  		   url :"/stocks/addStocks",
+ 		  		   data : stockModel,
+ 		  		 
+ 		  		   headers : {
+ 		  			'Content-Type' : 'application/json'   
+ 		  		   }
+ 		  		   }
+ 		  		   ).success(function (response) {
+ 		  				 
+ 		  			 if (response.status == 'success') {
+ 		  			//   $scope.stocks = response;
+ 		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+ 		  			//   $('#successMsg').show();
+ 		  			
+ 		  			$scope.isDisabled = true;
+ 		  			$scope.stockModel = response.model;
+ 		  			  } 
+ 		  			   
+ 		  		   }).error(function(error, status){
+ 		  			  
+ 		  				//   $('#errorMsg').show();
+ 		  		   });
+         	 
+         	 
+          }
+       });
 </script>
 <script type="text/javascript">
 	$(document).ready(function() {

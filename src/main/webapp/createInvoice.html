@@ -12,11 +12,17 @@
 
 
 
-		<div class="form-group row" ng-if="!isDisabled">
-
-			<label for="productType" class="col-sm-1">Product Type:</label> <input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Customer Name" name="productType"> <label
+			<div class="form-group row" ng-if="!isDisabled" >
+		
+			<label for="productType" class="col-sm-1" >Product Type:</label> 
+				<select ng-model="productType"  class="form-control col-sm-2" style="width: 20%;"
+				 ng-options="item for item in productTypes" ng-change="loadStocksByType(productType)"></select>
+				 
+				 </div>
+				<div class="form-group row" ng-if="!isDisabled && !showLensStock">
+				
+				
+				 <label
 				for="productName" class="col-sm-1">Product Name:</label> <input
 				type="text" ng-model="productName" class="form-control col-sm-2"
 				style="width: 20%;" placeholder="Product Name" name="productName">
@@ -46,15 +52,128 @@
 			</table>
 		</div>
 		
+		<div class="form-group row" ng-if="!isDisabled && showLensStock">
+	
+
+			<label for="lensProduct" class="col-sm-1">Lens Name:</label> <input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Name" name="lensType" ng-model="lensModel.productName"/>
+
+			<table class="table table-striped">
+				<thead>
+					<tr>
+					<th >Vision</th>
+						<th colspan="3">Left Eye</th>
+						
+
+					</tr>
+				</thead>
+
+
+	<tr>
+					<td rowspan="1"></td>
+					<td>SPH</td>
+					<td>CYL</td>
+					<td>Axial</td>
+					
+					
+					
+
+				</tr>
+				<tr>
+				<td>N.V.</td>
+						<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType" ng-model="lensModel.leftEye[0].sph"/></td>
+					<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType" ng-model="lensModel.leftEye[0].cyl"/></td>
+					<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType" ng-model="lensModel.leftEye[0].axial"/></td>
+					</tr>
+					<tr>
+					<td>D.V.</td>
+					<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType" ng-model="lensModel.leftEye[1].sph"/></td>
+					<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType" ng-model="lensModel.leftEye[1].cyl"/></td>
+					<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType"ng-model="lensModel.leftEye[1].axial" /></td>
+
+					</tr>
+
+		
+			</table>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+					<th >Vision</th>
+						<th colspan="3">Right Eye</th>
+						
+
+					</tr>
+				</thead>
+
+
+	<tr>
+					<td rowspan="1"></td>
+					<td>SPH</td>
+					<td>CYL</td>
+					<td>Axial</td>
+					
+					
+					
+
+				</tr>
+				<tr>
+				<td>N.V.</td>
+					<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType" ng-model="lensModel.rightEye[0].sph"/></td>
+					<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType" ng-model="lensModel.rightEye[0].cyl"/></td>
+					<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType" ng-model="lensModel.rightEye[0].axial"/></td>
+					</tr>
+					<tr>
+					<td>D.V.</td>
+					<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType" ng-model="lensModel.rightEye[1].sph"/></td>
+					<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType" ng-model="lensModel.rightEye[1].cyl"/></td>
+					<td><input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Lens Type" name="lensType"ng-model="lensModel.rightEye[1].axial" /></td>
+
+					</tr>
+
+		
+			</table>
+			<button id="editOrderBtn" type="button"
+							class="btn btn btn-primary col-sm-1" style="width: auto"; font-weight:bold;" ng-click="pushToList(lensModel)">Add</button>
+					
+		</div>
+		
 		<div class="form-group row" ng-if="isDisabled">
 
 			<label for="productType" class="col-sm-1">Invoice Id:</label> 
 				{{invoiceModel.invoiceId}}
+				
+					
 
 
 			
 		</div>
 	<form name="createInvoiceForm" autocomplete="off" novalidate>
+	
 
 		<table class="table table-striped" >
 			<h1 ng-if="invoiceModel.purchaseItems.length > 0" >Purchase Items</h1>
@@ -77,7 +196,10 @@
 
 					<td>{{ $index+1 }}</td>
 					
-					<td>{{ x.productName }}</td>
+					<td ng-if="!x.lensActive">{{ x.productName }}</td>
+					<td ng-if="x.lensActive">{{ x.productName}}, 
+							NV:{{x.leftEye[0].sph}}/{{x.leftEye[0].cyl}}/{{x.leftEye[0].axial}}//{{x.rightEye[0].sph}}/{{x.rightEye[0].cyl}}/{{x.rightEye[0].axial}}
+							DV:{{x.leftEye[1].sph}}/{{x.leftEye[1].cyl}}/{{x.leftEye[1].axial}}//{{x.rightEye[1].sph}}/{{x.rightEye[1].cyl}}/{{x.rightEye[1].axial}}</td>
 					
 					
 					<td><input type="text"

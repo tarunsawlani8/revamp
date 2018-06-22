@@ -3,7 +3,7 @@ package com.amaropticals.model;
 public class AddOrUpdateStockRequest {
 	
 	private int productId;
-	private int quantity;
+	private int quantityChange;
 	private String reason;
 	private String refId;
 	private String updateDate;
@@ -14,11 +14,11 @@ public class AddOrUpdateStockRequest {
 	public void setProductId(int productId) {
 		this.productId = productId;
 	}
-	public int getQuantity() {
-		return quantity;
+	public int getQuantityChange() {
+		return quantityChange;
 	}
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+	public void setQuantityChange(int quantity) {
+		this.quantityChange = quantity;
 	}
 	public String getReason() {
 		return reason;

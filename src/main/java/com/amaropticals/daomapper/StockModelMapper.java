@@ -17,7 +17,7 @@ public class StockModelMapper implements RowMapper<StockModel> {
 		model.setProductSubType(rs.getString("product_sub_type"));
 		model.setProductName(rs.getString("product_name"));
 		model.setProductDesc(rs.getString("product_desc"));
-		model.setProductDesc(rs.getString("product_qty"));
+		model.setQuantity(rs.getInt("product_qty"));
 		model.setUpdateDate(String.valueOf(rs.getTimestamp("update_timestamp")));
 		model.setCode(rs.getString("product_code"));
 		model.setJsonFileName(rs.getString("json_file_name"));

@@ -35,15 +35,22 @@ public class StockController {
 	@RequestMapping(value = "/getAllStocks", method = RequestMethod.GET)
 	public List<StockModel> getAllStocks() {
 		String sql = "SELECT * from opticals_stocks;";
-		List<StockModel> model = stocksDAO.findStocks(sql);
-		Iterator<StockModel> itr = model.iterator();
-		List<StockModel> getList = new ArrayList<>();
-		while (itr.hasNext()) {
+		List<StockModel> modelList = stocksDAO.findStocks(sql);
+	//	Iterator<StockModel> itr = model.iterator();
+	//	List<StockModel> getList = new ArrayList<>();
+		/*while (itr.hasNext()) {
 			getList.add((StockModel) JSONFileHandler.readJsonFile(
 					"C:/Users/Sonu/Desktop/stocks", "", itr.next().getJsonFileName(),
 					StockModel.class));
-		}
-		return getList;
+		}*/
+		return modelList;
+	}
+	
+	@RequestMapping(value = "/getStocksType", method = RequestMethod.GET)
+	public List<String> getStocksType() {
+		String sql = "SELECT DISTINCT(product_type) from opticals_stocks;";
+		List<String> modelList = stocksDAO.query(sql);
+		return modelList;
 	}
 
 	@RequestMapping(value = "/getStocksbyType/{type}", method = RequestMethod.GET)
@@ -80,13 +87,13 @@ public class StockController {
 
 		String sql = "UPDATE opticals_stocks SET product_qty= ? ,update_timestamp=?  WHERE product_id=?";
 		stocksDAO.addOrUpdateStocks(sql,
-				model.getQuantity() + request.getQuantity(),
+				model.getQuantity() + request.getQuantityChange(),
 				Timestamp.valueOf(LocalDateTime.now()),
 				request.getProductId());
 
-		model.setQuantity(model.getQuantity() + request.getQuantity());
+		model.setQuantity(model.getQuantity() + request.getQuantityChange());
 		StockLogModel log = new StockLogModel();
-		log.setQuantityChange(request.getQuantity());
+		log.setQuantityChange(request.getQuantityChange());
 		log.setReason(request.getReason());
 		log.setRefId(request.getRefId());
 		log.setUpdateDate(request.getUpdateDate());
@@ -98,10 +105,11 @@ public class StockController {
 
 		LOGGER.info(
 				"Updating stocks for productId={}, quantity={} and user={} ",
-				request.getProductId(), request.getQuantity(),
+				request.getProductId(), request.getQuantityChange(),
 				request.getUser());
 		AddOrUpdateStockResponse response = new AddOrUpdateStockResponse();
 		response.setStatus("success");
+		response.setModel(model);
 		return response;
 	}
 
@@ -119,8 +127,9 @@ public class StockController {
 				request.getProductType(), request.getProductSubType(),
 				request.getProductName(), request.getProductDesc(),
 				request.getCode(), request.getQuantity(),
-				Timestamp.valueOf(request.getUpdateDate()),
-				request.getJsonFileName());
+				Timestamp.valueOf(LocalDateTime.now()),
+				request.getProductId()+".json");
+		request.setJsonFileName(request.getProductId()+".json");
 		StockLogModel log = new StockLogModel();
 		log.setQuantityChange(request.getQuantity());
 		log.setReason("New Stock Added");
@@ -128,9 +137,10 @@ public class StockController {
 		log.setUpdateDate(request.getUpdateDate());
 		log.setUser("user");
 		request.setStockLogsList(Arrays.asList(log));
-		JSONFileHandler.writeJsonFile("C:/Users/Sonu/Desktop", "",
+		JSONFileHandler.writeJsonFile("C:/Users/Sonu/Desktop/stocks/", "",
 				request.getJsonFileName(), request);
 		AddOrUpdateStockResponse response = new AddOrUpdateStockResponse();
+		response.setModel(request);
 		response.setStatus("success");
 		return response;
 	}

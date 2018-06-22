@@ -3,11 +3,16 @@ package com.amaropticals.restcontroller;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +30,7 @@ import com.amaropticals.model.CreateInvoiceResponse;
 import com.amaropticals.model.ItemModel;
 import com.amaropticals.model.TaskModel;
 
+
 @RequestMapping("/invoices")
 @RestController
 public class InvoiceController {
@@ -41,21 +47,18 @@ public class InvoiceController {
 	private TaskController taskController;
 
 	@RequestMapping(value = "/createInvoice", method = RequestMethod.POST)
-	public CreateInvoiceResponse createInvoice(
-			@RequestBody CreateInvoiceRequest request) {
+	public CreateInvoiceResponse createInvoice(@RequestBody CreateInvoiceRequest request) {
 
 		request.setInvoiceId(CommonUtils.getNextInvoiceId());
 		request.setJsonFileName(request.getInvoiceId() + ".json");
 		String sql = "INSERT INTO opticals_invoices (invoice_id, name , email , contact, delivery_date, total_amount,"
 				+ " initial_amount, update_timestamp, json_file_name) VALUES (?, ?, ?, ?, ?,?,?,?,?)";
-		stocksDAO.addOrUpdateInvoice(sql, request.getInvoiceId(),
-				request.getName(), request.getEmail(), request.getContact(),
-				Date.valueOf(request.getDeliveryDate()),
-				request.getTotalAmount(), request.getInitialAmount(),
-				Timestamp.valueOf(LocalDateTime.now()),
-				request.getInvoiceId()+".json");
-		JSONFileHandler.writeJsonFile("C:/Users/Sonu/Desktop/invoices", String.valueOf(request.getInvoiceId()).substring(0, 6),
-				request.getJsonFileName(), request);
+		stocksDAO.addOrUpdateInvoice(sql, request.getInvoiceId(), request.getName(), request.getEmail(),
+				request.getContact(), Date.valueOf(request.getDeliveryDate()), request.getTotalAmount(),
+				request.getInitialAmount(), Timestamp.valueOf(LocalDateTime.now()), request.getInvoiceId() + ".json");
+		JSONFileHandler.writeJsonFile("C:/Users/Sonu/Desktop/invoices",
+				String.valueOf(request.getInvoiceId()).substring(0, 6), request.getJsonFileName(), request);
+		checkAndPopulateTasksAndDate(request);
 		updateStocks(request);
 
 		CreateInvoiceResponse response = new CreateInvoiceResponse();
@@ -65,36 +68,55 @@ public class InvoiceController {
 	}
 
 	@RequestMapping(value = "/getInvoice/{invoiceId}", method = RequestMethod.GET)
-	public AddOrUpdateStockResponse getInvoice(
-			@PathVariable("invoiceId") long invoiceId) {
+	public AddOrUpdateStockResponse getInvoice(@PathVariable("invoiceId") long invoiceId) {
 
 		return null;
+	}
+
+	private void checkAndPopulateTasksAndDate(CreateInvoiceRequest request) {
+
+		LOGGER.info("Checking for lens purchase for invoiceId={}", request.getInvoiceId());
+		int count = 1;
+
+		List<ItemModel> lensList = request.getPurchaseItems().stream().filter(item -> true == item.isLensActive())
+				.collect(Collectors.toList());
+
+		if (!CollectionUtils.isEmpty(lensList)) {
+			for (ItemModel model : lensList) {
+
+				model.setTaskId(request.getInvoiceId() + "-" + count);
+				model.setDeliveryDate(request.getDeliveryDate());
+				TaskModel taskModel = new TaskModel();
+				taskModel.setTaskId(model.getTaskId());
+				taskModel.setTaskStatus(AOConstants.TASK_IN_PROGRESS);
+				taskModel.setDeliveryDate(model.getDeliveryDate());
+				taskModel.setUpdateTime(request.getUpdateDate());
+				taskController.createTasks(taskModel);
+
+				count++;
+				LOGGER.info("Lens task identifed for lens purchase for invoiceId={}, task={}", request.getInvoiceId(),
+						model.getTaskId());
+
+			}
+		}
 	}
 
 	@Async
 	private void updateStocks(CreateInvoiceRequest request) {
 		LOGGER.info("Updating stocks for invoiceId={}", request.getInvoiceId());
-		int taskCount = 1;
+
 		for (ItemModel item : request.getPurchaseItems()) {
-			if (item.isLensActive()) {
-				TaskModel model = new TaskModel();
-				model.setTaskId(request.getInvoiceId() + "-" + taskCount);
-				item.setTaskId(request.getInvoiceId() + "-" + taskCount);
-				model.setTaskStatus(AOConstants.TASK_IN_PROGRESS);
-				model.setDeliveryDate(item.getDeliveryDate());
-				model.setUpdateTime(request.getDeliveryDate());
-				taskController.createTasks(model);
-				taskCount++;
+			if (!item.isLensActive()) {
+				AddOrUpdateStockRequest model = new AddOrUpdateStockRequest();
+				model.setProductId(item.getProductId());
+				model.setQuantityChange(-item.getBuyQuantity());
+				model.setReason("Invoice");
+				model.setRefId(String.valueOf(request.getInvoiceId()));
+				model.setUpdateDate(request.getUpdateDate());
+				model.setUser("user");
+				stockController.updateStocks(model);
 			}
 
-			AddOrUpdateStockRequest model = new AddOrUpdateStockRequest();
-			model.setProductId(item.getProductId());
-			model.setQuantity(-item.getBuyQuantity());
-			model.setReason("Invoice");
-			model.setRefId(String.valueOf(request.getInvoiceId()));
-			model.setUpdateDate(request.getUpdateDate());
-			model.setUser("user");
-			stockController.updateStocks(model);
 		}
 
 	}
