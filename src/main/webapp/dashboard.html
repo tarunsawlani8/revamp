@@ -78,7 +78,7 @@
             
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tasks<span class="caret"></span></a>
               <ul class="dropdown-menu">
-                      <li><a href="#/searchTask.html">Search Task</a></li>
+                      <li><a href="#/searchTask">Search Task</a></li>
                 
               </ul>
             
@@ -133,8 +133,13 @@
               templateUrl: 'updateStock.html',
               controller: 'UpdateStockController'
            }).
-         
-         otherwise({
+           when('/searchTask', {
+               templateUrl: 'searchTask.html',
+               controller: 'TaskController'
+            }).
+   
+           
+           otherwise({
             redirectTo: '/createInvoice'
          });
       }]);
@@ -288,7 +293,7 @@ $scope.calculatePendingAmount = function(initialAmount) {
 		};
 		
 		$scope.pushToList = function(purchaseModel) 
-		{	console.log(purchaseModel);
+		{	
 			$scope.invoiceModel.purchaseItems.push(purchaseModel);
 			$scope.lensRecordExists= true;
 			$scope.lensModel = {"lensActive": true,
@@ -320,7 +325,7 @@ $scope.createInvoice = function(invoiceModel) {
 		  		   }
 		  		   ).success(function (response) {
 		  				 
-		  		console.log(response);
+		  		
 		  			 if (response.status == 'success') {
 		  			//   $scope.stocks = response;
 		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
@@ -466,6 +471,82 @@ $scope.createInvoice = function(invoiceModel) {
          	 
           }
        });
+      
+      
+      mainApp.controller('TaskController', function($scope, $http) {
+          $scope.isDisabled = false;
+          
+          $scope.taskModel = {};
+          
+          $scope.taskStatusList = ['IN PROGRESS', 'READY FOR PICKUP', 'DELIVERED'];
+          
+       
+          $scope.pushToEdit = function(model) {
+         	 $scope.taskModel=model;
+          };
+          
+          $scope.taskList = [];
+          $scope.searchTask = function(taskModel) {
+        	  
+         	 $http({method : "POST",
+ 		  		   url :"/tasks/searchTasks",
+ 		  		   data : taskModel,
+ 		  		 
+ 		  		   headers : {
+ 		  			'Content-Type' : 'application/json'   
+ 		  		   }
+ 		  		   }
+ 		  		   ).success(function (response) {
+ 		  				 
+ 		  			// if (response.status == 'success') {
+ 		  			//   $scope.stocks = response;
+ 		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+ 		  			//   $('#successMsg').show();
+ 		  			
+ 		  		
+ 		  			$scope.taskList = response;
+ 		  		 $scope.taskModel = {};
+ 		  			//  } 
+ 		  			   
+ 		  		   }).error(function(error, status){
+ 		  			  
+ 		  				//   $('#errorMsg').show();
+ 		  		   });
+         	 
+         	 
+          };
+          
+          $scope.updateTask = function(taskModel) {
+        	  
+          	 $http({method : "POST",
+  		  		   url :"/tasks/updateTasks",
+  		  		   data : taskModel,
+  		  		 
+  		  		   headers : {
+  		  			'Content-Type' : 'application/json'   
+  		  		   }
+  		  		   }
+  		  		   ).success(function (response) {
+  		  				 
+  		  			 if (response.status == 'SUCCESS') {
+  		  			//   $scope.stocks = response;
+  		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+  		  			//   $('#successMsg').show();
+  		  			
+  		  			$scope.isDisabled = true;
+  		  	  		  $scope.taskList = [];
+  		  		
+  		  			  } 
+  		  			   
+  		  		   }).error(function(error, status){
+  		  			  
+  		  				//   $('#errorMsg').show();
+  		  		   });
+          	 
+          	 
+           };
+       });
+      
 </script>
 <script type="text/javascript">
 	$(document).ready(function() {

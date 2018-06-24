@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +46,9 @@ public class InvoiceController {
 
 	@Autowired
 	private TaskController taskController;
+	
+	@Value("${amaropticals.invoices.path}")
+	private String invoicePath;
 
 	@RequestMapping(value = "/createInvoice", method = RequestMethod.POST)
 	public CreateInvoiceResponse createInvoice(@RequestBody CreateInvoiceRequest request) {
@@ -56,7 +60,7 @@ public class InvoiceController {
 		stocksDAO.addOrUpdateInvoice(sql, request.getInvoiceId(), request.getName(), request.getEmail(),
 				request.getContact(), Date.valueOf(request.getDeliveryDate()), request.getTotalAmount(),
 				request.getInitialAmount(), Timestamp.valueOf(LocalDateTime.now()), request.getInvoiceId() + ".json");
-		JSONFileHandler.writeJsonFile("C:/Users/Sonu/Desktop/invoices",
+		JSONFileHandler.writeJsonFile(invoicePath,
 				String.valueOf(request.getInvoiceId()).substring(0, 6), request.getJsonFileName(), request);
 		checkAndPopulateTasksAndDate(request);
 		updateStocks(request);

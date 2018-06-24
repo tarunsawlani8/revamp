@@ -21,37 +21,37 @@ import com.amaropticals.model.TaskModel;
 @Repository
 public class StocksDAO {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-	private final JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate stockJdbcTemplate;
 
 	@Autowired
 	public StocksDAO(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
+		this.stockJdbcTemplate = jdbcTemplate;
 	}
 
 	public List<StockModel> findStocks(String sql) {
 
-		List<StockModel> list = jdbcTemplate.query(sql, new StockModelMapper());
+		List<StockModel> list = stockJdbcTemplate.query(sql, new StockModelMapper());
 		return list;
 
 	}
 
 	public List<TaskModel> findTasks(String sql) {
 
-		List<TaskModel> list = jdbcTemplate.query(sql, new TaskModelMapper());
+		List<TaskModel> list = stockJdbcTemplate.query(sql, new TaskModelMapper());
 		return list;
 
 	}
 	
 	public List<String> query(String sql) {
 
-		List<String> list = jdbcTemplate.queryForList(sql,  String.class);
+		List<String> list = stockJdbcTemplate.queryForList(sql,  String.class);
 		return list;
 
 	}
 
 	public String addOrUpdateStocks(String sql, Object... model) {
 
-		int row = jdbcTemplate.update(sql, model);
+		int row = stockJdbcTemplate.update(sql, model);
 
 		if (row > 0) {
 
@@ -64,7 +64,7 @@ public class StocksDAO {
 
 	public String addOrUpdateInvoice(String sql, Object... model) {
 
-		int row = jdbcTemplate.update(sql, model);
+		int row = stockJdbcTemplate.update(sql, model);
 
 		if (row > 0) {
 
@@ -79,7 +79,7 @@ public class StocksDAO {
 	public void loadMaxInvoiceIdfromDB() {
 
 		String sql = "SELECT MAX(invoice_id) FROM opticals_invoices;";
-		Long invoiceId = jdbcTemplate.queryForObject(sql, Long.class);
+		Long invoiceId = stockJdbcTemplate.queryForObject(sql, Long.class);
 		LOGGER.info("Loaded Max Invoice Id={} from DB", invoiceId);
 		CommonUtils.setInvoiceId(invoiceId);
 	}
