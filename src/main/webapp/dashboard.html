@@ -137,10 +137,14 @@
                templateUrl: 'searchTask.html',
                controller: 'TaskController'
             }).
+            when('/getMessageBalance', {
+                templateUrl: 'messageBalance.html',
+                controller: 'MessageController'
+             }).
    
            
            otherwise({
-            redirectTo: '/createInvoice'
+            redirectTo: '/getMessageBalance'
          });
       }]);
       
@@ -546,6 +550,31 @@ $scope.createInvoice = function(invoiceModel) {
           	 
            };
        });
+      
+      mainApp.controller('MessageController', function($scope, $http) {
+    	  
+    	  $scope.balanceResponse ={};
+    	  
+    	    $http({method : "GET",
+     		   url :"https://www.fast2sms.com/dev/wallet?authorization=4cuqXLQCY3ePfnk7tpz5vsG2DoNiBMhFI0RdZKrwSA98bxOWyE4mZQ1iXFxpAY6wDKegnzjIUyW8J9st", 
+     		 
+     		   headers : {
+     			'Content-Type' : 'application/json'   
+     		   }
+     		   }
+     		   ).success(function (response) {
+     				 
+     		
+     			  $scope.balanceResponse = response.wallet;
+     			   
+     		   }).error(function(error, status){
+     			  
+     				//   $('#errorMsg').show();
+     		   });
+
+    	  
+    	  
+      });
       
 </script>
 <script type="text/javascript">
