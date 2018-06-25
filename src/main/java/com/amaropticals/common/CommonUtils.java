@@ -8,10 +8,12 @@ import javax.net.ssl.TrustManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.amaropticals.model.CreateInvoiceRequest;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.client.urlconnection.HTTPSProperties;
 
 public class CommonUtils {
 
@@ -24,7 +26,7 @@ public class CommonUtils {
 		Calendar cal = Calendar.getInstance();
 
 		StringBuilder date = new StringBuilder();
-		date.append(cal.get(1));
+		date.append(String.valueOf(cal.get(1)).substring(2, 4));
 		if (cal.get(2)+1 < 10) {
 			date.append(0);
 		}
@@ -34,8 +36,8 @@ public class CommonUtils {
 		}
 		date.append(cal.get(5));
 
-		if (Long.parseLong(date.toString() + "000") > invoiceId) {
-			nextInvoiceId = Long.parseLong(date.toString() + "001");
+		if (Long.parseLong(date.toString() + "00") > invoiceId) {
+			nextInvoiceId = Long.parseLong(date.toString() + "01");
 		} else {
 
 			nextInvoiceId = invoiceId + 1;
@@ -48,15 +50,16 @@ public class CommonUtils {
 	}
 	
 	
-/*public static boolean sendMessages(Orders orders) {	
+public static boolean sendMessages(CreateInvoiceRequest request, String status) {	
 		
 		boolean sent = false;
 		try {
-
 			
 			DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
 			SSLContext sslContext = SSLContext.getInstance("SSL");
+		
 			ServerTrustManager manager = new ServerTrustManager();
+
 			sslContext.init(null, new TrustManager[] {manager}, null);
 			defaultClientConfig.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES, new HTTPSProperties(null, sslContext));
 			Client client = Client.create(defaultClientConfig);
@@ -69,16 +72,16 @@ public class CommonUtils {
 				  .header("cache-control", "no-cache")
 				  .header("content-type", "application/x-www-form-urlencoded")
 					.type("application/x-www-form-urlencoded")
-					.post(ClientResponse.class, getMessage(orders));
+					.post(ClientResponse.class, getMessage(request, status));
 
 		if (response.getStatus() == 200 || response.getStatus() == 201 ) {
 			sent = true;
 			} else {
 				
-				System.out.println("Output from Server .... \n");
+				
 				String output = response.getEntity(String.class);
 				
-				System.out.println(output);
+				LOGGER.info("Message  Sent Failed:"+output );
 			 
 			}
 		
@@ -91,24 +94,26 @@ public class CommonUtils {
 		  }
 //	return response.getStatusText();
 		return sent;
-	}*/
+	}
 
 	
-/*	private static String getMessage(Orders orders) {
+	private static String getMessage(CreateInvoiceRequest request,String status) {
 		
-		String message = "sender_id=AMROPT&message=543&language=english&route=qt&numbers="+orders.getCustomerContact()+
-				  "&variables={#DD#}|{#EE#}&variables_values="+orders.getCustomerName()+"|"+orders.getDeliveryStatus()+"&flash=0";
+		String message = "sender_id=AMROPT&message=1011&language=english&route=qt&numbers="+request.getContact()+
+				  "&variables={#EE#}|{#AA#}|{#DD#}|{#CC#}&variables_values="+request.getName()+"|"+request.getInvoiceId()+
+				  "|IN PROGRESS|"+request.getDeliveryDate()+"&flash=0";
 		
 		
-		if ("READY FOR PICKUP".equalsIgnoreCase(orders.getDeliveryStatus())) {
+		if ("READY FOR PICKUP".equalsIgnoreCase(status)) {
 			
-		message = 	"sender_id=AMROPT&message=542&language=english&route=qt&numbers="+orders.getCustomerContact()+
-				  "&variables={#EE#}&variables_values= "+orders.getCustomerName()+"&flash=0";
+		message = 	"sender_id=AMROPT&message=1012&language=english&route=qt&numbers="+request.getContact()+
+				  "&variables={#EE#}|{#AA#}|{#FF#}&variables_values= "+request.getName()+"|"+request.getInvoiceId()+
+				  "|READY FOR PICKUP&flash=0";
 		}
 		
 		return message;
 		
-	}*/
+	}
 
 	public static long getInvoiceId() {
 		return invoiceId;
