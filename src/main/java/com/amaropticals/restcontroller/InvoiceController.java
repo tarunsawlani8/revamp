@@ -3,10 +3,8 @@ package com.amaropticals.restcontroller;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +23,6 @@ import com.amaropticals.common.CommonUtils;
 import com.amaropticals.dao.StocksDAO;
 import com.amaropticals.filehandling.JSONFileHandler;
 import com.amaropticals.model.AddOrUpdateStockRequest;
-import com.amaropticals.model.AddOrUpdateStockResponse;
 import com.amaropticals.model.CreateInvoiceRequest;
 import com.amaropticals.model.CreateInvoiceResponse;
 import com.amaropticals.model.ItemModel;
@@ -61,10 +58,10 @@ public class InvoiceController {
 				request.getContact(), Date.valueOf(request.getDeliveryDate()), request.getTotalAmount(),
 				request.getInitialAmount(), Timestamp.valueOf(LocalDateTime.now()), request.getInvoiceId() + ".json");
 		JSONFileHandler.writeJsonFile(invoicePath,
-				String.valueOf(request.getInvoiceId()).substring(0, 6), request.getJsonFileName(), request);
+				String.valueOf(request.getInvoiceId()).substring(0, 4), request.getJsonFileName(), request);
 		checkAndPopulateTasksAndDate(request);
 		updateStocks(request);
-
+			
 		CreateInvoiceResponse response = new CreateInvoiceResponse();
 		response.setStatus("success");
 		response.setResponse(request);
@@ -72,9 +69,10 @@ public class InvoiceController {
 	}
 
 	@RequestMapping(value = "/getInvoice/{invoiceId}", method = RequestMethod.GET)
-	public AddOrUpdateStockResponse getInvoice(@PathVariable("invoiceId") long invoiceId) {
-
-		return null;
+	public CreateInvoiceRequest getInvoice(@PathVariable("invoiceId") long invoiceId) {
+		String sql = "SELECT * from opticals_invoices WHERE invoice_id="+invoiceId;
+				
+		return stocksDAO.findInvoices(sql).get(0);
 	}
 
 	private void checkAndPopulateTasksAndDate(CreateInvoiceRequest request) {
@@ -102,7 +100,9 @@ public class InvoiceController {
 						model.getTaskId());
 
 			}
+			CommonUtils.sendMessages(request, "");
 		}
+	
 	}
 
 	@Async
