@@ -75,7 +75,7 @@ public class TaskController {
 		stocksDAO.addOrUpdateInvoice(sql, model.getTaskStatus(), model.getDeliveryDate(),
 				Timestamp.valueOf(LocalDateTime.now()), model.getUser(), model.getTaskId());
 		if ("READY FOR PICKUP".equalsIgnoreCase(model.getTaskStatus())) {
-			CommonUtils.sendMessages(invoiceController.getInvoice(Long.valueOf(model.getTaskId().split("-")[0])), "");
+			CommonUtils.sendMessages(invoiceController.getInvoice(Long.valueOf(model.getTaskId().split("-")[0])), model.getTaskStatus());
 		}
 		CommonResponse response = new CommonResponse();
 		response.setStatus(AOConstants.SUCCESS_TEXT);
