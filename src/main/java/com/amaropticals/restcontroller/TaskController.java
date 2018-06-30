@@ -60,6 +60,9 @@ public class TaskController {
 
 			sql = "SELECT * from opticals_tasks WHERE delivery_date > '" + Date.valueOf(model.getDeliveryDate()) + "';";
 
+		} else {
+
+			sql = "SELECT * from opticals_tasks ;";
 		}
 
 		return stocksDAO.findTasks(sql);
@@ -75,7 +78,8 @@ public class TaskController {
 		stocksDAO.addOrUpdateInvoice(sql, model.getTaskStatus(), model.getDeliveryDate(),
 				Timestamp.valueOf(LocalDateTime.now()), model.getUser(), model.getTaskId());
 		if ("READY FOR PICKUP".equalsIgnoreCase(model.getTaskStatus())) {
-			CommonUtils.sendMessages(invoiceController.getInvoice(Long.valueOf(model.getTaskId().split("-")[0])), model.getTaskStatus());
+			CommonUtils.sendMessages(invoiceController.getInvoice(Long.valueOf(model.getTaskId().split("-")[0])),
+					model.getTaskStatus());
 		}
 		CommonResponse response = new CommonResponse();
 		response.setStatus(AOConstants.SUCCESS_TEXT);

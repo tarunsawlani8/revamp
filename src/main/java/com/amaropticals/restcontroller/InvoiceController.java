@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +53,20 @@ public class InvoiceController {
 
 		request.setInvoiceId(CommonUtils.getNextInvoiceId());
 		request.setJsonFileName(request.getInvoiceId() + ".json");
+		
+		request.setUpdateDate(Timestamp.valueOf(LocalDateTime.now()).toString());
+		
+		if (StringUtils.isBlank(request.getDeliveryDate())) {
+			request.setDeliveryDate(request.getUpdateDate().substring(0, 10));
+			
+		}
+		
+		
 		String sql = "INSERT INTO opticals_invoices (invoice_id, name , email , contact, delivery_date, total_amount,"
 				+ " initial_amount, update_timestamp, json_file_name) VALUES (?, ?, ?, ?, ?,?,?,?,?)";
 		stocksDAO.addOrUpdateInvoice(sql, request.getInvoiceId(), request.getName(), request.getEmail(),
 				request.getContact(), Date.valueOf(request.getDeliveryDate()), request.getTotalAmount(),
-				request.getInitialAmount(), Timestamp.valueOf(LocalDateTime.now()), request.getInvoiceId() + ".json");
+				request.getInitialAmount(),request.getUpdateDate() , request.getInvoiceId() + ".json");
 		JSONFileHandler.writeJsonFile(invoicePath,
 				String.valueOf(request.getInvoiceId()).substring(0, 4), request.getJsonFileName(), request);
 		checkAndPopulateTasksAndDate(request);
