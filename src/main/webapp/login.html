@@ -116,7 +116,7 @@
       </div>
 
       
-<form id="loginForm" auto-complete="off" >	  
+<form id="loginForm" auto-complete="off" action="loadDash" >	  
 <input type="hidden" name="pageAction" value="getOrderDetails"/>
 <div class="form-group row" >	
   <label for="userName" class="col-sm-4"style="width:auto; font-size:24px;">User Name:</label>
@@ -125,7 +125,7 @@
  <label for="password" class="col-sm-4"style="width:auto; font-size:24px;">Password:</label>
   <input type="password" class="form-control col-sm-4" style="width:auto; margin-right:10px;" placeholder="Password" name="password" id="password" data-validation="length alphanumeric">
 
-        <button  id="loginBtn" type="button" class="btn btn btn-default col-sm-4" style="width:auto; font-weight:bold;">Login</button>
+        <button  id="loginBtn" type="submit" class="btn btn btn-default col-sm-4" style="width:auto; font-weight:bold;">Login</button>
       
     
 </div> 
@@ -161,7 +161,7 @@
 	$(document).ready(function() {
 		$('#successMsg').hide();
 		$('#errorMsg').hide();
-		$('#loginBtn').click(function() {
+	/* 	$('#loginBtn').click(function() {
 			var formdata = $("#loginForm").serialize();
 			jQuery.ajax({
 				url : "loginApp",
@@ -184,7 +184,7 @@
 				$('#successMsg').hide();
 				}
 			});
-		});
+		}); */
 
 	});
 </script>

@@ -10,6 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,9 @@ public class StockController {
 
 	@Autowired
 	private StocksDAO stocksDAO;
+	
+	@Value("${amaropticals.stocks.path}")
+	private String stockPath;
 
 	@RequestMapping(value = "/getAllStocks", method = RequestMethod.GET)
 	public List<StockModel> getAllStocks() {
@@ -82,7 +86,7 @@ public class StockController {
 			@RequestBody AddOrUpdateStockRequest request) {
 
 		StockModel model = (StockModel) JSONFileHandler.readJsonFile(
-				"C:/Users/Sonu/Desktop/stocks", "", request.getProductId() + ".json",
+				stockPath, "", request.getProductId() + ".json",
 				StockModel.class);
 
 		String sql = "UPDATE opticals_stocks SET product_qty= ? ,update_timestamp=?  WHERE product_id=?";
@@ -100,7 +104,7 @@ public class StockController {
 		log.setUser(request.getUser());
 
 		model.getStockLogsList().add(log);
-		JSONFileHandler.writeJsonFile("C:/Users/Sonu/Desktop/stocks", "",
+		JSONFileHandler.writeJsonFile(stockPath, "",
 				model.getJsonFileName(), model);
 
 		LOGGER.info(
@@ -137,7 +141,7 @@ public class StockController {
 		log.setUpdateDate(request.getUpdateDate());
 		log.setUser("user");
 		request.setStockLogsList(Arrays.asList(log));
-		JSONFileHandler.writeJsonFile("C:/Users/Sonu/Desktop/stocks/", "",
+		JSONFileHandler.writeJsonFile(stockPath, "",
 				request.getJsonFileName(), request);
 		AddOrUpdateStockResponse response = new AddOrUpdateStockResponse();
 		response.setModel(request);

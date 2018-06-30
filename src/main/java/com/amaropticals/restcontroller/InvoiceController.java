@@ -3,14 +3,13 @@ package com.amaropticals.restcontroller;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +23,6 @@ import com.amaropticals.common.CommonUtils;
 import com.amaropticals.dao.StocksDAO;
 import com.amaropticals.filehandling.JSONFileHandler;
 import com.amaropticals.model.AddOrUpdateStockRequest;
-import com.amaropticals.model.AddOrUpdateStockResponse;
 import com.amaropticals.model.CreateInvoiceRequest;
 import com.amaropticals.model.CreateInvoiceResponse;
 import com.amaropticals.model.ItemModel;
@@ -45,6 +43,9 @@ public class InvoiceController {
 
 	@Autowired
 	private TaskController taskController;
+	
+	@Value("${amaropticals.invoices.path}")
+	private String invoicePath;
 
 	@RequestMapping(value = "/createInvoice", method = RequestMethod.POST)
 	public CreateInvoiceResponse createInvoice(@RequestBody CreateInvoiceRequest request) {
@@ -56,11 +57,11 @@ public class InvoiceController {
 		stocksDAO.addOrUpdateInvoice(sql, request.getInvoiceId(), request.getName(), request.getEmail(),
 				request.getContact(), Date.valueOf(request.getDeliveryDate()), request.getTotalAmount(),
 				request.getInitialAmount(), Timestamp.valueOf(LocalDateTime.now()), request.getInvoiceId() + ".json");
-		JSONFileHandler.writeJsonFile("C:/Users/Sonu/Desktop/invoices",
-				String.valueOf(request.getInvoiceId()).substring(0, 6), request.getJsonFileName(), request);
+		JSONFileHandler.writeJsonFile(invoicePath,
+				String.valueOf(request.getInvoiceId()).substring(0, 4), request.getJsonFileName(), request);
 		checkAndPopulateTasksAndDate(request);
 		updateStocks(request);
-
+			
 		CreateInvoiceResponse response = new CreateInvoiceResponse();
 		response.setStatus("success");
 		response.setResponse(request);
@@ -68,9 +69,10 @@ public class InvoiceController {
 	}
 
 	@RequestMapping(value = "/getInvoice/{invoiceId}", method = RequestMethod.GET)
-	public AddOrUpdateStockResponse getInvoice(@PathVariable("invoiceId") long invoiceId) {
-
-		return null;
+	public CreateInvoiceRequest getInvoice(@PathVariable("invoiceId") long invoiceId) {
+		String sql = "SELECT * from opticals_invoices WHERE invoice_id="+invoiceId;
+				
+		return stocksDAO.findInvoices(sql).get(0);
 	}
 
 	private void checkAndPopulateTasksAndDate(CreateInvoiceRequest request) {
@@ -98,7 +100,9 @@ public class InvoiceController {
 						model.getTaskId());
 
 			}
+			CommonUtils.sendMessages(request, "");
 		}
+	
 	}
 
 	@Async

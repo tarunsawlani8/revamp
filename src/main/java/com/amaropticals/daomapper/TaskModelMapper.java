@@ -13,7 +13,7 @@ public class TaskModelMapper implements RowMapper<TaskModel> {
 	public TaskModel mapRow(ResultSet rs, int rowNum) throws SQLException {
 		TaskModel model = new TaskModel();
 		model.setTaskId(rs.getString("task_id"));
-		model.setTaskStatus(rs.getString("product_type"));
+		model.setTaskStatus(rs.getString("task_status"));
 		model.setDeliveryDate(String.valueOf(rs.getDate("delivery_date")));
 		model.setUpdateTime(String.valueOf(rs.getTimestamp("update_timestamp")));
 		model.setUser(rs.getString("user"));
