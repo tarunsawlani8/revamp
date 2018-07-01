@@ -29,7 +29,6 @@ import com.amaropticals.model.CreateInvoiceResponse;
 import com.amaropticals.model.ItemModel;
 import com.amaropticals.model.TaskModel;
 
-
 @RequestMapping("/invoices")
 @RestController
 public class InvoiceController {
@@ -44,7 +43,7 @@ public class InvoiceController {
 
 	@Autowired
 	private TaskController taskController;
-	
+
 	@Value("${amaropticals.invoices.path}")
 	private String invoicePath;
 
@@ -53,36 +52,50 @@ public class InvoiceController {
 
 		request.setInvoiceId(CommonUtils.getNextInvoiceId());
 		request.setJsonFileName(request.getInvoiceId() + ".json");
-		
+		request.setDeliveryDate(request.getDeliveryDate().substring(0,10));
+
 		request.setUpdateDate(Timestamp.valueOf(LocalDateTime.now()).toString());
-		
+
 		if (StringUtils.isBlank(request.getDeliveryDate())) {
 			request.setDeliveryDate(request.getUpdateDate().substring(0, 10));
-			
+
 		}
-		
-		
+
 		String sql = "INSERT INTO opticals_invoices (invoice_id, name , email , contact, delivery_date, total_amount,"
 				+ " initial_amount, update_timestamp, json_file_name) VALUES (?, ?, ?, ?, ?,?,?,?,?)";
 		stocksDAO.addOrUpdateInvoice(sql, request.getInvoiceId(), request.getName(), request.getEmail(),
 				request.getContact(), Date.valueOf(request.getDeliveryDate()), request.getTotalAmount(),
-				request.getInitialAmount(),request.getUpdateDate() , request.getInvoiceId() + ".json");
-		JSONFileHandler.writeJsonFile(invoicePath,
-				String.valueOf(request.getInvoiceId()).substring(0, 4), request.getJsonFileName(), request);
+				request.getInitialAmount(), request.getUpdateDate(), request.getInvoiceId() + ".json");
+		JSONFileHandler.writeJsonFile(invoicePath, String.valueOf(request.getInvoiceId()).substring(0, 4),
+				request.getJsonFileName(), request);
 		checkAndPopulateTasksAndDate(request);
 		updateStocks(request);
-			
+
 		CreateInvoiceResponse response = new CreateInvoiceResponse();
 		response.setStatus("success");
 		response.setResponse(request);
 		return response;
 	}
 
+	@RequestMapping(value = "/getInvoicesByMonth/{yymm}", method = RequestMethod.GET)
+	public List<CreateInvoiceRequest> getInvoicesByMonth(@PathVariable("yymm") long yymm) {
+
+		String startInvoice = yymm + "0100";
+		String endInvoice = yymm + "3200";
+
+		String sql = "SELECT * FROM opticals_invoices WHERE invoice_id > " + Long.valueOf(startInvoice) + " AND invoice_id < "
+				+ Long.valueOf(endInvoice) + ";";
+
+		return stocksDAO.findInvoices(sql);
+	}
+
 	@RequestMapping(value = "/getInvoice/{invoiceId}", method = RequestMethod.GET)
 	public CreateInvoiceRequest getInvoice(@PathVariable("invoiceId") long invoiceId) {
-		String sql = "SELECT * from opticals_invoices WHERE invoice_id="+invoiceId;
-				
-		return stocksDAO.findInvoices(sql).get(0);
+
+		CreateInvoiceRequest model = (CreateInvoiceRequest) JSONFileHandler.readJsonFile(invoicePath,
+				String.valueOf(invoiceId).substring(0, 4), String.valueOf(invoiceId) + ".json",
+				CreateInvoiceRequest.class);
+		return model;
 	}
 
 	private void checkAndPopulateTasksAndDate(CreateInvoiceRequest request) {
@@ -112,7 +125,7 @@ public class InvoiceController {
 			}
 			CommonUtils.sendMessages(request, "");
 		}
-	
+
 	}
 
 	@Async

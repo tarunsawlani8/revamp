@@ -1,0 +1,95 @@
+
+<div class="modal-header">
+	<h3 class="modal-title">Invoice Details</h3>
+</div>
+<div class="modal-body">
+	<ul>
+		<div>
+			<label for="productType">Invoice Id:</label>
+			{{invoiceModel.invoiceId}} <label for="productType">Customer
+				Name:</label>{{invoiceModel.name}} <label for="productType">Contact:</label>{{invoiceModel.contact}}
+		</div>
+
+		<div>
+			<label for="productType">Referred By:</label> {{invoiceModel.refDr}}
+			<label for="productType">Delivery Date:</label>{{invoiceModel.deliveryDate}}
+			<label for="productType">Update Time:</label>{{invoiceModel.updateDate}}
+		</div>
+		<div>
+			<label for="productType">Total Amount:</label>
+			{{invoiceModel.totalAmount}} <label for="productType">Initial
+				Amount:</label>{{invoiceModel.initialAmount}} <label for="productType">Pending
+				Amount:</label>{{invoiceModel.pendingAmount}}
+		</div>
+	</ul>
+	<table class="table table-striped">
+		<thead>
+			<tr ng-if="invoiceModel.purchaseItems.length > 0">
+				<th>S.No</th>
+				<th>Product Name</th>
+				<th>Quantity</th>
+				<th>Unit Price</th>
+				<th>Total Cost</th>
+
+
+			</tr>
+		</thead>
+
+		<tr ng-repeat="items in invoiceModel.purchaseItems">
+			<td>{{ $index+1 }}</td>
+			<td ng-if="!items.lensActive">{{items.productName}}-{{items.code}}--{{items.productDesc}}</td>
+			<td ng-if="items.lensActive">{{items.productName}} <br />
+				<table>
+					<thead>
+						<th rowspan="1">Vision</th>
+						<th colspan="3" style="padding: 5px">Right Eye</th>
+						<th colspan="3" style="padding: 5px">Left Eye</th>
+					</thead>
+					<tr>
+						<td style="padding: 5px">-</td>
+						<td style="padding: 5px">SPH</td>
+						<td style="padding: 5px">CYL</td>
+						<td style="padding: 5px">AXIAL</td>
+						<td style="padding: 5px">SPH</td>
+						<td style="padding: 5px">CYL</td>
+						<td style="padding: 5px" >AXIAL</td>
+					</tr>
+					<tr>
+						<td>D.V</td>
+						<td>{{items.rightEye[0].sph}}</td>
+						<td>{{items.rightEye[0].cyl}}</td>
+						<td>{{items.rightEye[0].axial}}</td>
+						<td>{{items.leftEye[0].sph}}</td>
+						<td>{{items.leftEye[0].cyl}}</td>
+						<td>{{items.leftEye[0].axial}}</td>
+
+					</tr>
+					<tr>
+						<td>Add</td>
+						<td>{{items.rightEye[1].sph}}</td>
+						<td>{{items.rightEye[1].cyl}}</td>
+						<td>{{items.rightEye[1].axial}}</td>
+						<td>{{items.leftEye[1].sph}}</td>
+						<td>{{items.leftEye[1].cyl}}</td>
+						<td>{{items.leftEye[1].axial}}</td>
+					</tr>
+				</table>
+
+			</td>
+
+
+			<td>{{items.buyQuantity}}</td>
+			<td>{{items.unitPrice}}</td>
+			<td>{{items.totalCost = items.buyQuantity * items.unitPrice}}</td>
+
+
+		</tr>
+	</table>
+
+
+
+
+</div>
+<div class="modal-footer">
+	<button class="btn btn-warning" ng-click="cancel()">Dismiss</button>
+</div>
