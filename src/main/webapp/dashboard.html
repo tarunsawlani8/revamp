@@ -33,11 +33,13 @@
     
       <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="../../resources/demos/style.css">
+  <link rel="stylesheet" href="../../loader.css">
     
   
   </head>
 
   <body ng-app="mainApp">
+  <div class="loading-dialog" data-loading > </div>
 
     <!-- Fixed navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -91,6 +93,8 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+    
+    
 	<div ng-view></div>
 	
     
@@ -119,6 +123,23 @@
 
 	<script>
 	  var mainApp = angular.module("mainApp", ['ngRoute','ui.bootstrap']);
+	  mainApp.directive('loading', ['$http', function ($http) {
+		    return {
+		        restrict: 'A',
+		        link: function (scope, elm, attrs) {
+		            scope.isLoading = function () {
+		                return $http.pendingRequests.length > 0;
+		            };
+		            scope.$watch(scope.isLoading, function (v) {
+		                if (v) {
+		                    $(elm).show();
+		                } else {
+		                	$(elm).hide();
+		                }
+		            });
+		        }
+		    };
+		}]);
       mainApp.config(['$routeProvider', function($routeProvider) {
          $routeProvider.
          
@@ -534,7 +555,7 @@ $scope.createInvoice = function(invoiceModel) {
           
           $scope.taskList = [];
           $scope.searchTask = function(taskModel) {
-        	  
+        	  $scope.loading= true;
          	 $http({method : "POST",
  		  		   url :"/tasks/searchTasks",
  		  		   data : taskModel,
@@ -544,7 +565,7 @@ $scope.createInvoice = function(invoiceModel) {
  		  		   }
  		  		   }
  		  		   ).success(function (response) {
- 		  				 
+ 		  			$scope.loading= false;
  		  			// if (response.status == 'success') {
  		  			//   $scope.stocks = response;
  		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
@@ -628,9 +649,10 @@ $scope.createInvoice = function(invoiceModel) {
         	
        });
       
-      mainApp.controller('MessageController', function($scope, $http) {
-    	  
+      mainApp.controller('MessageController', function($scope, $http, $routeParams) {
+    	  $scope.loading = true;
     	  $scope.balanceResponse ={};
+    	 
     	  
     	    $http({method : "GET",
      		   url :"https://www.fast2sms.com/dev/wallet?authorization=4cuqXLQCY3ePfnk7tpz5vsG2DoNiBMhFI0RdZKrwSA98bxOWyE4mZQ1iXFxpAY6wDKegnzjIUyW8J9st", 
@@ -640,7 +662,7 @@ $scope.createInvoice = function(invoiceModel) {
      		   }
      		   }
      		   ).success(function (response) {
-     				 
+     			  $scope.loading = false;
      		
      			  $scope.balanceResponse = response.wallet;
      			   
