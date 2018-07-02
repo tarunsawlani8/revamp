@@ -99,15 +99,15 @@ public static boolean sendMessages(CreateInvoiceRequest request, String status) 
 	
 	private static String getMessage(CreateInvoiceRequest request,String status) {
 		
-		String message = "sender_id=AMROPT&message=1011&language=english&route=qt&numbers="+request.getContact()+
-				  "&variables={#EE#}|{#AA#}|{#DD#}|{#CC#}&variables_values="+request.getName()+"|"+request.getInvoiceId()+
+		String message = "sender_id=AMROPT&message=1136&language=english&route=qt&numbers="+request.getContact()+
+				  "&variables={#CC#}|{#BB#}|{#EE#}|{#DD#}&variables_values="+request.getName()+"|"+request.getInvoiceId()+
 				  "|IN PROGRESS|"+request.getDeliveryDate()+"&flash=0";
 		
 		
 		if ("READY FOR PICKUP".equalsIgnoreCase(status)) {
 			
-		message = 	"sender_id=AMROPT&message=1012&language=english&route=qt&numbers="+request.getContact()+
-				  "&variables={#EE#}|{#AA#}|{#FF#}&variables_values= "+request.getName()+"|"+request.getInvoiceId()+
+		message = 	"sender_id=AMROPT&message=1137&language=english&route=qt&numbers="+request.getContact()+
+				  "&variables={#CC#}|{#BB#}|{#EE#}&variables_values= "+request.getName()+"|"+request.getInvoiceId()+
 				  "|READY FOR PICKUP&flash=0";
 		}
 		

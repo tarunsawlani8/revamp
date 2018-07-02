@@ -4,7 +4,7 @@
 	<div class="page-header">
 		<h1 ng-if="!isDisabled">Add Invoice</h1>
 	</div>
-<div class="page-header">
+	<div class="page-header">
 		<h1 ng-if="isDisabled">Invoice Details</h1>
 	</div>
 
@@ -12,178 +12,183 @@
 
 
 
-			<div class="form-group row" ng-if="!isDisabled" >
-		
-			<label for="productType" class="col-sm-1" >Product Type:</label> 
-				<select ng-model="productType"  class="form-control col-sm-2" style="width: 20%;"
-				 ng-options="item for item in productTypes" ng-change="loadStocksByType(productType)"></select>
-				 
-				 </div>
-				<div class="form-group row" ng-if="!isDisabled && !showLensStock">
-				
-				
-				 <label
-				for="productName" class="col-sm-1">Product Name:</label> <input
-				type="text" ng-model="productName" class="form-control col-sm-2"
-				style="width: 20%;" placeholder="Product Name" name="productName">
+	<div class="form-group row" ng-if="!isDisabled">
+
+		<label for="productType" class="col-sm-2">Product Type:</label> <select
+			ng-model="productType" class="form-control col-sm-2"
+			style="width: 20%;" ng-options="item for item in productTypes"
+			ng-change="loadStocksByType(productType)"></select>
 
 
-			<table class="table table-striped">
-				<thead>
-					<tr ng-if="stocks.length > 0">
-						<th>S.No</th>
-						
-						<th>Product Name</th>
-						
-
-					</tr>
-				</thead>
-
-				<tr ng-repeat="stock in stocks| filter:productName">
-					<td>{{ $index+1 }}</td>
-					<td>{{ stock.code }}-{{ stock.productDesc }}</td>
-						<td>
-						<button id="editOrderBtn" type="button"
-							class="btn btn btn-primary col-sm-1" style="width: auto"; font-weight:bold;" ng-click="pushToTemp(stock)">Add</button>
-					</td>
-					
-
-				</tr>
-			</table>
-		</div>
-		
-		<div class="form-group row" ng-if="!isDisabled && showLensStock">
-	
-
-			<label for="lensProduct" class="col-sm-1">Lens Name:</label> <input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Name" name="lensType" ng-model="lensModel.productName"/>
-
-			<table class="table table-striped">
-				<thead>
-					<tr>
-					<th >Vision</th>
-						<th colspan="3">Right Eye</th>
-						
-
-					</tr>
-				</thead>
+	</div>
+	<div class="form-group row" ng-if="!isDisabled && !showLensStock">
 
 
-	<tr>
-					<td rowspan="1"></td>
-					<td>SPH</td>
-					<td>CYL</td>
-					<td>Axial</td>
-					
-					
-					
-
-				</tr>
-				<tr>
-				<td>D.V.</td>
-					<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType" ng-model="lensModel.rightEye[0].sph"/></td>
-					<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType" ng-model="lensModel.rightEye[0].cyl"/></td>
-					<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType" ng-model="lensModel.rightEye[0].axial"/></td>
-					</tr>
-					<tr>
-					<td>Near Add</td>
-					<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType" ng-model="lensModel.rightEye[1].sph"/></td>
-					<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType" ng-model="lensModel.rightEye[1].cyl"/></td>
-					<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType"ng-model="lensModel.rightEye[1].axial" /></td>
-
-					</tr>
-
-		
-			</table>
-			
-			<table class="table table-striped">
-				<thead>
-					<tr>
-					<th >Vision</th>
-						<th colspan="3">Left Eye</th>
-						
-
-					</tr>
-				</thead>
+		<label for="productName" class="col-sm-1">Product Name:</label> <input
+			type="text" ng-model="productName" class="form-control col-sm-2"
+			style="width: 20%;" placeholder="Product Name" name="productName">
 
 
-	<tr>
-					<td rowspan="1"></td>
-					<td>SPH</td>
-					<td>CYL</td>
-					<td>Axial</td>
-					
-					
-					
-
-				</tr>
-				<tr>
-				<td>D.V.</td>
-						<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType" ng-model="lensModel.leftEye[0].sph"/></td>
-					<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType" ng-model="lensModel.leftEye[0].cyl"/></td>
-					<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType" ng-model="lensModel.leftEye[0].axial"/></td>
-					</tr>
-					<tr>
-					<td>Near Add</td>
-					<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType" ng-model="lensModel.leftEye[1].sph"/></td>
-					<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType" ng-model="lensModel.leftEye[1].cyl"/></td>
-					<td><input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Lens Type" name="lensType"ng-model="lensModel.leftEye[1].axial" /></td>
-
-					</tr>
-
-		
-			</table>
-			<button id="editOrderBtn" type="button"
-							class="btn btn btn-primary col-sm-1" style="width: auto"; font-weight:bold;" ng-click="pushToList(lensModel)">Add</button>
-					
-		</div>
-		
-		<div class="form-group row" ng-if="isDisabled">
-
-			<label for="productType" class="col-sm-1">Invoice Id:</label> 
-				{{invoiceModel.invoiceId}}
-				
-					
-
-
-			
-		</div>
-	<form name="createInvoiceForm" autocomplete="off" novalidate>
-	
-
-		<table class="table table-striped" >
-			<h1 ng-if="invoiceModel.purchaseItems.length > 0" >Purchase Items</h1>
-
-		
+		<table class="table table-striped">
 			<thead>
-				<tr ng-if="invoiceModel.purchaseItems.length > 0" >
+				<tr ng-if="stocks.length > 0">
 					<th>S.No</th>
-				
+
+					<th>Product Name</th>
+
+
+				</tr>
+			</thead>
+
+			<tr ng-repeat="stock in stocks| filter:productName">
+				<td>{{ $index+1 }}</td>
+				<td>{{ stock.code }}-{{ stock.productDesc }}</td>
+				<td>
+					<button id="editOrderBtn" type="button"
+						class="btn btn btn-primary col-sm-1" style="width: auto"
+						; font-weight:bold;" ng-click="pushToTemp(stock)">Add</button>
+				</td>
+
+
+			</tr>
+		</table>
+	</div>
+
+	<div class="form-group row" ng-if="!isDisabled && showLensStock">
+
+
+		<label for="lensProduct" class="col-sm-1">Lens Name:</label> <input
+			type="text" class="form-control col-sm-2" style="width: 20%;"
+			placeholder="Lens Name" name="lensType"
+			ng-model="lensModel.productName" />
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Vision</th>
+					<th colspan="3">Right Eye</th>
+
+
+				</tr>
+			</thead>
+
+
+			<tr>
+				<td rowspan="1"></td>
+				<td>SPH</td>
+				<td>CYL</td>
+				<td>Axial</td>
+
+
+
+
+			</tr>
+			<tr>
+				<td>D.V.</td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.rightEye[0].sph" /></td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.rightEye[0].cyl" /></td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.rightEye[0].axial" /></td>
+			</tr>
+			<tr>
+				<td>Near Add</td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.rightEye[1].sph" /></td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.rightEye[1].cyl" /></td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.rightEye[1].axial" /></td>
+
+			</tr>
+
+
+		</table>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Vision</th>
+					<th colspan="3">Left Eye</th>
+
+
+				</tr>
+			</thead>
+
+
+			<tr>
+				<td rowspan="1"></td>
+				<td>SPH</td>
+				<td>CYL</td>
+				<td>Axial</td>
+
+
+
+
+			</tr>
+			<tr>
+				<td>D.V.</td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.leftEye[0].sph" /></td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.leftEye[0].cyl" /></td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.leftEye[0].axial" /></td>
+			</tr>
+			<tr>
+				<td>Near Add</td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.leftEye[1].sph" /></td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.leftEye[1].cyl" /></td>
+				<td><input type="text" class="form-control col-sm-2"
+					style="width: 20%;" placeholder="Lens Type" name="lensType"
+					ng-model="lensModel.leftEye[1].axial" /></td>
+
+			</tr>
+
+
+		</table>
+		<button id="editOrderBtn" type="button"
+			class="btn btn btn-primary col-sm-1" style="width: auto"
+			; font-weight:bold;" ng-click="pushToList(lensModel)">Add</button>
+
+	</div>
+
+	<div class="form-group row" ng-if="isDisabled">
+
+		<label for="productType" class="col-sm-1">Invoice Id:</label>
+		{{invoiceModel.invoiceId}}
+
+
+
+
+
+	</div>
+	<form name="createInvoiceForm" autocomplete="off" novalidate>
+
+
+		<table class="table table-striped">
+			<h1 ng-if="invoiceModel.purchaseItems.length > 0">Purchase
+				Items</h1>
+
+
+			<thead>
+				<tr ng-if="invoiceModel.purchaseItems.length > 0">
+					<th>S.No</th>
+
 					<th>Product Name</th>
 					<th>Quantity</th>
 					<th>Unit Price</th>
@@ -196,27 +201,28 @@
 				<tr ng-repeat="x in invoiceModel.purchaseItems">
 
 					<td>{{ $index+1 }}</td>
-					
-					<td ng-if="!x.lensActive">{{ x.productName }}</td>
-					<td ng-if="x.lensActive">{{ x.productName}}, 
-							DV:{{x.leftEye[0].sph}}/{{x.leftEye[0].cyl}}/{{x.leftEye[0].axial}}//{{x.rightEye[0].sph}}/{{x.rightEye[0].cyl}}/{{x.rightEye[0].axial}}
-							Near Add:{{x.leftEye[1].sph}}/{{x.leftEye[1].cyl}}/{{x.leftEye[1].axial}}//{{x.rightEye[1].sph}}/{{x.rightEye[1].cyl}}/{{x.rightEye[1].axial}}</td>
-					
-					
-					<td><input type="text"
-						class="form-control col-sm-1" style="width: auto;"
-						value="" name="customerContact" ng-model="x.buyQuantity"
-						id="customerContact" ng-disabled="isDisabled" required ng-pattern="/^[0-9]*$/" /></td>
-						<td><input type="text"
-						class="form-control col-sm-1" style="width: auto;"
-						value="" name="customerContact" ng-model="x.unitPrice"
-						id="customerContact" ng-disabled="isDisabled" required ng-pattern="/^[0-9]*$/"/></td>
-						
-							<td><input type="text"
-						class="form-control col-sm-1" style="width: auto;"
-						value="" name="purchaseCode" ng-model="x.purchaseCode"
-						id="purchaseCode"  ng-disabled="isDisabled" required/></td>
-						
+
+					<td ng-if="!x.lensActive">{{ x.productName}}-{{ x.code}}</td>
+					<td ng-if="x.lensActive">{{ x.productName}},
+						DV:{{x.leftEye[0].sph}}/{{x.leftEye[0].cyl}}/{{x.leftEye[0].axial}}//{{x.rightEye[0].sph}}/{{x.rightEye[0].cyl}}/{{x.rightEye[0].axial}}
+						Near
+						Add:{{x.leftEye[1].sph}}/{{x.leftEye[1].cyl}}/{{x.leftEye[1].axial}}//{{x.rightEye[1].sph}}/{{x.rightEye[1].cyl}}/{{x.rightEye[1].axial}}</td>
+
+
+					<td><input type="text" class="form-control col-sm-1"
+						style="width: auto;" value="" name="customerContact"
+						ng-model="x.buyQuantity" id="customerContact"
+						ng-disabled="isDisabled" required ng-pattern="/^[0-9]*$/" /></td>
+					<td><input type="text" class="form-control col-sm-1"
+						style="width: auto;" value="" name="customerContact"
+						ng-model="x.unitPrice" id="customerContact"
+						ng-disabled="isDisabled" required ng-pattern="/^[0-9]*$/" /></td>
+
+					<td><input type="text" class="form-control col-sm-1"
+						style="width: auto;" value="" name="purchaseCode"
+						ng-model="x.purchaseCode" id="purchaseCode"
+						ng-disabled="isDisabled"  /></td>
+
 
 
 					<td>{{x.totalCost = x.buyQuantity * x.unitPrice}}</td>
@@ -226,7 +232,7 @@
 						<button id="sendSMSBtn" type="button"
 							class="btn btn btn-danger col-sm-1" style="width: auto"
 							; ng-click="deleteItem(invoiceModel.purchaseItems.indexOf(x))"font-weight:bold;">Delete
-							</button>
+						</button>
 					</td>
 				</tr>
 
@@ -238,69 +244,95 @@
 
 
 
-		<div class="form-group row"  ng-if="invoiceModel.purchaseItems.length > 0">
-		 <label
-				for="totalAmount" class="col-sm-1">Total Amount:</label> 
-				
-				 <input
+		<div class="form-group row"
+			ng-if="invoiceModel.purchaseItems.length > 0">
+			<label for="totalAmount" class="col-sm-1">Total Amount:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Initial Amount" name="totalAmount" id="totalAmount" ng-model="invoiceModel.totalAmount"
-				data-validation="length numeric" disabled="true" ng-value="{{calculateTotalAmount()}}" />
-				
-					<label for="initialAmount" class="col-sm-1">Initial Amount:</label> <input
+				placeholder="Initial Amount" name="totalAmount" id="totalAmount"
+				ng-model="invoiceModel.totalAmount" data-validation="length numeric"
+				disabled="true" ng-value="{{calculateTotalAmount()}}" /> <label
+				for="initialAmount" class="col-sm-1">Initial Amount:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Initial Amount" name="initialAmount" id="initialAmount" ng-model="invoiceModel.initialAmount"
-				data-validation="length numeric"  ng-disabled="isDisabled" required ng-pattern="/^[0-9]*$/"/>
-				
-			  	 <label
-				for="pendingAmount" class="col-sm-1">Pending Amount:</label>
-				 <input 
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Initial Amount" name="totalAmount" id="pendingAmount" ng-model="invoiceModel.pendingAmount"
-				data-validation="length numeric" disabled="true" ng-value="{{calculatePendingAmount(invoiceModel.initialAmount)}}" 
-				disabled="true"/> 
-				
+				placeholder="Initial Amount" name="initialAmount" id="initialAmount"
+				ng-model="invoiceModel.initialAmount"
+				data-validation="length numeric" ng-disabled="isDisabled" required
+				ng-pattern="/^[0-9]*$/" /> <label for="pendingAmount"
+				class="col-sm-1">Pending Amount:</label> <input type="text"
+				class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Initial Amount" name="totalAmount" id="pendingAmount"
+				ng-model="invoiceModel.pendingAmount"
+				data-validation="length numeric" disabled="true"
+				ng-value="{{calculatePendingAmount(invoiceModel.initialAmount)}}"
+				disabled="true" />
+
 		</div>
 
 
-		<div class="form-group row" ng-if="invoiceModel.purchaseItems.length > 0">
+		<div class="form-group row"
+			ng-if="invoiceModel.purchaseItems.length> 0  && !invoiceModel.withoutDetailsInvoice">
 
 			<label for="customerName" class="col-sm-1">Customer Name:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Customer Name" name="customerName" id="customerName"
-				data-validation="length alphanumeric" ng-model="invoiceModel.name" ng-disabled="isDisabled" required  ng-pattern="/^[a-zA-Z.]*$/"> <label
-				for="customerContact" class="col-sm-1">Customer Contact:</label> <input
+				data-validation="length alphanumeric" ng-model="invoiceModel.name"
+				ng-disabled="isDisabled" required ng-pattern="/^[a-zA-Z. ]*$/">
+			<label for="customerContact" class="col-sm-1">Customer
+				Contact:</label> <input type="text" class="form-control col-sm-2"
+				style="width: 20%;" placeholder="Customer Contact"
+				name="customerContact" id="customerContact"
+				data-validation="length alphanumeric"
+				ng-model="invoiceModel.contact" ng-disabled="isDisabled" required
+				ng-pattern="/^[0-9]*$/" ng-minlength="10" ng-maxlength="10" /> <label
+				for="customerEmail" class="col-sm-1">Customer Email:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Customer Contact" name="customerContact"
-				id="customerContact" data-validation="length alphanumeric" ng-model="invoiceModel.contact" ng-disabled="isDisabled"
-				
-			required ng-pattern="/^[0-9]*$/" ng-minlength="10" ng-maxlength="10" />
+				placeholder="Customer Email" name="customerEmail" id="customerEmail"
+				data-validation="length alphanumeric" ng-model="invoiceModel.email"
+				ng-disabled="isDisabled">
 
-			<label for="customerEmail" class="col-sm-1">Customer Email:</label>
-			<input type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Customer Email" name="customerEmail"
-				id="customerEmail" data-validation="length alphanumeric" ng-model="invoiceModel.email" ng-disabled="isDisabled"> 
-				
 		</div>
-		<div class="form-group row" ng-if="invoiceModel.purchaseItems.length > 0">
-				<label for="referredBy" class="col-sm-1">Referred by:</label> <input
+		<div class="form-group row"
+			ng-if="invoiceModel.purchaseItems.length > 0 && !invoiceModel.withoutDetailsInvoice" >
+			<label for="referredBy" class="col-sm-1">Referred by:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Referred By" name="referredBy" id="referredBy"
-				data-validation="length alphanumeric" ng-model="invoiceModel.referredBy" ng-disabled="isDisabled">
-				<label for="deliveryDate" class="col-sm-1">Delivery Date:</label> <input
+				data-validation="length alphanumeric"
+				ng-model="invoiceModel.referredBy" ng-disabled="isDisabled">
+			<label for="deliveryDate" class="col-sm-1">Delivery Date:</label><!--  <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Delivery Date" name="deliveryDate" id="deliveryDate"
-				data-validation="length alphanumeric" ng-model="invoiceModel.deliveryDate" ng-disabled="isDisabled" required />
-				
+				data-validation="length alphanumeric"
+				ng-model="invoiceModel.deliveryDate" ng-disabled="isDisabled"
+				required /> -->
+				<div class="col-sm-2">
+				 	  <p class="input-group">
+              <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="invoiceModel.deliveryDate" is-open="datePicker.opened" min-date="minDate"  datepicker-options="dateOptions" ng-disabled="isDisabled" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-disabled="isDisabled" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p> 
+            </div>
+          
+       
+
 		</div>
-				
-  <button ng-if="!isDisabled && invoiceModel.purchaseItems.length > 0" id="editOrderBtn" type="button" class="btn btn btn-primary col-sm-1" style="width:auto";
+		
+		 
+
+<div class="form-group row"
+			ng-if="!isDisabled && invoiceModel.purchaseItems.length > 0">
+			<label for="productType" class="col-sm-2">Customer Details
+				Not Required:</label> <input type="checkbox"
+				ng-model="invoiceModel.withoutDetailsInvoice" 
+				class="form-control col-sm-2" style="width: 20%;">
+		</div>
+		
+		<button ng-if="!isDisabled && invoiceModel.purchaseItems.length > 0"
+			id="editOrderBtn" type="button" class="btn btn btn-primary col-sm-1"
+			style="width: auto" ;
    ng-click="createInvoice(invoiceModel)"
-   ng-disabled="createInvoiceForm.$invalid"
-   font-weight:bold;">Create Invoice</button>
-   <a ng-if="isDisabled" 
-   	href="#createInvoice.html"
-   >Back To Home</a>
+			ng-disabled="createInvoiceForm.$invalid"font-weight:bold;">Create
+			Invoice</button>
+		<a ng-if="isDisabled" href="#createInvoice.html">Back To Home</a>
 	</form>
 
 </div>

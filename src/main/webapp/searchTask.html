@@ -72,15 +72,24 @@
 				 class="form-control col-sm-2" style="width: 20%;"
 				 ng-options="task for task in taskStatusList" required ng-disabled="isDisabled" ></select>
 			<label
-				for="productSubType" class="col-sm-1">Delivery Date:</label> <input
+				for="productSubType" class="col-sm-1">Delivery Date:</label> <!-- <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Product Sub Type" name="productSubType"
 				id="productSubType" data-validation="length alphanumeric" ng-model="taskModel.deliveryDate" ng-disabled="isDisabled"
 				
-			required/>
+			required/> -->
 		
-				
+				   <div class="col-sm-2">
+            <p class="input-group">
+              <input type="text" class="form-control"  uib-datepicker-popup="{{format}}" ng-model="taskModel.deliveryDate" is-open="opened" min-date="minDate"  datepicker-options="dateOptions" ng-disabled="isDisabled" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-disabled="isDisabled" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+        </div>
 		</div>
+		
+		
 				
   <button ng-if="!isDisabled" id="editOrderBtn" type="button" class="btn btn btn-primary col-sm-1" style="width:auto";
    ng-click="updateTask(taskModel)"
