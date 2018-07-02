@@ -74,6 +74,7 @@ public class TaskController {
 		TaskModel oldModel = searchTasks(model).get(0);
 
 		model.setTaskId(oldModel.getTaskId());
+		model.setDeliveryDate(model.getDeliveryDate().substring(0,10));
 		String sql = "UPDATE  opticals_tasks SET  task_status=? , delivery_date=?, update_timestamp=?, user=? WHERE task_id=?;";
 		stocksDAO.addOrUpdateInvoice(sql, model.getTaskStatus(), model.getDeliveryDate(),
 				Timestamp.valueOf(LocalDateTime.now()), model.getUser(), model.getTaskId());

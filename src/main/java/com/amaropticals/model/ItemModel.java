@@ -12,6 +12,9 @@ public class ItemModel {
 	private boolean lensActive;
 	private String purchaseCode;
 	private double unitPrice;
+	private String productDesc;
+	private String code;
+	
 	
 	private List<LensModel> leftEye;
 	private List<LensModel> rightEye;
@@ -75,6 +78,18 @@ public class ItemModel {
 	}
 	public void setRightEye(List<LensModel> rightEye) {
 		this.rightEye = rightEye;
+	}
+	public String getProductDesc() {
+		return productDesc;
+	}
+	public void setProductDesc(String productDesc) {
+		this.productDesc = productDesc;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 	

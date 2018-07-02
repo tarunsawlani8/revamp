@@ -1,0 +1,63 @@
+
+<div class="container theme-showcase" role="main">
+
+	<div class="page-header">
+		<h1>Search Invoice</h1>
+	</div>
+
+	<div class="form-group row">
+
+		<label for="productType" class="col-sm-2">Month:</label> <select
+			class="form-control col-sm-2"
+			style="width: 20%;" ng-change="getInvoicesByMonth(searchInvoice.year + searchInvoice.month)" ng-model="searchInvoice.month">
+			<option value="01">Jan</option>
+			<option value="02">Feb</option>
+			<option value="03">Mar</option>
+			<option value="04">Apr</option>
+			<option value="05">May</option>
+			<option value="06">Jun</option>
+			<option value="07">Jul</option>
+			<option value="08">Aug</option>
+			<option value="09">Sep</option>
+			<option value="10">Oct</option>
+			<option value="11">Nov</option>
+			<option value="12">Dec</option>
+			</select> 
+			<label
+			for="productType" class="col-sm-2">Year:</label> <select
+			 class="form-control col-sm-2"
+			style="width: 20%;" ng-model="searchInvoice.year">
+			<option selected="selected" value="18">2018</option></select>
+
+	</div>
+		<div>
+
+
+			<table class="table table-striped">
+				<thead>
+					<tr ng-if="invoiceList.length > 0">
+						<th>S.No</th>
+						<th>Invoice Id</th>
+						<th>Customer Name</th>
+						<th>Customer Contact</th>
+						<th> Details</th>
+						
+
+					</tr>
+				</thead>
+
+				<tr ng-repeat="invoice in invoiceList | orderBy : '-invoiceId' ">
+					<td>{{ $index+1 }}</td>
+					<td>{{invoice.invoiceId}}</td>
+					<td>{{invoice.name}}</td>
+					<td>{{invoice.contact}}</td>
+						<td>
+						<button id="editOrderBtn" type="button"
+							class="btn btn btn-primary col-sm-1" style="width: auto"; font-weight:bold;" ng-click="viewDetails(invoice.invoiceId, 'lg')">View Details</button>
+					</td>
+					
+
+				</tr>
+			</table>
+		</div>
+</div>
