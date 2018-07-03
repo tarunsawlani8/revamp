@@ -33,7 +33,7 @@
     
       <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="../../resources/demos/style.css">
-  <link rel="stylesheet" href="../../loader.css">
+  <link rel="stylesheet" href="../../loader_1.css">
     
   
   </head>
@@ -711,6 +711,8 @@ $scope.createInvoice = function(invoiceModel) {
 	        $scope.viewDetails = function (invoiceId, size) {
 	            $scope.invoiceModel = {}
 	            
+	         
+	            
 	            $http({method : "GET",
 			  		   url :"/invoices/getInvoice/"+invoiceId,
 			  		   headers : {
@@ -747,7 +749,7 @@ $scope.createInvoice = function(invoiceModel) {
 	            modalInstance.result.then(function (selectedItem) {
 	                $scope.selected = selectedItem;
 	            }, function () {
-	                $log.info('Modal dismissed at: ' + new Date());
+	               
 	            });
 	        };
 	            }]);
