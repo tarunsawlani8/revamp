@@ -278,7 +278,7 @@
 				required /> -->
 				<div class="col-sm-2">
 				 	  <p class="input-group">
-              <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="invoiceModel.deliveryDate" is-open="datePicker.opened" min-date="minDate"  datepicker-options="dateOptions" ng-disabled="isDisabled" ng-required="true" close-text="Close" />
+              <input type="text" class="form-control"  ng-change="adjustTimeZone()" datepicker-popup="yyyy-MM-dd" ng-model="invoiceModel.deliveryDate" is-open="datePicker.opened" min-date="minDate"  datepicker-options="dateOptions" ng-disabled="isDisabled" ng-required="true" close-text="Close" />
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-disabled="isDisabled" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               </span>
@@ -305,7 +305,15 @@
    ng-click="createInvoice(invoiceModel)"
 			ng-disabled="createInvoiceForm.$invalid"font-weight:bold;">Create
 			Invoice</button>
+			
+			<button ng-if="isDisabled" type="button" class="btn btn btn-primary col-sm-1"
+			style="width: auto" ;
+   ng-click="downloadInvoice(invoiceModel.invoiceId)"
+			font-weight:bold;">Download
+			Invoice</button>
+			<br/>
 		<a ng-if="isDisabled" href="#createInvoice.html">Back To Home</a>
+		
 	</form>
 
 </div>

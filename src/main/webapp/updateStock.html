@@ -35,6 +35,7 @@
 						
 						<th>Product Name</th>
 						<th>Quantity</th>
+						<th>Details</th>
 						
 
 					</tr>
@@ -46,8 +47,13 @@
 					<td>{{stock.quantity}}</td>
 						<td>
 						<button id="editOrderBtn" type="button"
+							class="btn btn btn-primary col-sm-1" style="width: auto"; font-weight:bold;" ng-click="viewStockDetails(stock.productId, 'lg')">View Details</button>
+					</td>
+						<td>
+						<button id="editOrderBtn" type="button"
 							class="btn btn btn-primary col-sm-1" style="width: auto"; font-weight:bold;" ng-click="pushToEdit(stock)">Edit</button>
 					</td>
+				
 					
 
 				</tr>

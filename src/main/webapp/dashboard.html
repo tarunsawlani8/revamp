@@ -33,7 +33,7 @@
     
       <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="../../resources/demos/style.css">
-  <link rel="stylesheet" href="../../loader_1.css">
+  <link rel="stylesheet" href="../../loader_2.css">
     
   
   </head>
@@ -373,18 +373,36 @@ $scope.createInvoice = function(invoiceModel) {
 		};
 		
 		
-		   
-
-      
+	
+		 
      	  $scope.clear = function () {
      	    $scope.invoiceModel.deliveryDate = null;
      	  };
+     	  
+	
+     	  $scope.adjustTimeZone= function() {	
+     	//	console.log($scope.invoiceModel.deliveryDate);
+     		var targetTime = $scope.invoiceModel.deliveryDate;
+     	
+     	    
+     	var   month = '' + (targetTime.getMonth() + 1),
+           day = '' + targetTime.getDate(),
+           year = targetTime.getFullYear();
+
+       if (month.length < 2) month = '0' + month;
+       if (day.length < 2) day = '0' + day;
+
+       $scope.invoiceModel.deliveryDate = [year, month, day].join('-')
+     		
+     		 }; 
 
      	
-     	  $scope.toggleMin = function() {
+     	   $scope.toggleMin = function() {
      	    $scope.minDate = $scope.minDate ? null : new Date();
+     	//    console.log($scope.minDate);
      	  };
-     	  $scope.toggleMin();
+     	  $scope.toggleMin(); 
+     	//  $scope.minDate = null;
  
  
  $scope.datePicker = {
@@ -407,15 +425,26 @@ $scope.createInvoice = function(invoiceModel) {
      	    startingDay: 1
      	  };
 
+     	  
+     	 $scope.downloadInvoice = function(invoiceId) {
+     		 
+     		 window.open("/invoices/downloadInvoice/"+invoiceId);
+     		
+     		 
+     	 };
      
  
       });
       
       
      
+      
+      
  
       
-      mainApp.controller('UpdateStockController', function($scope, $http) {
+      mainApp.controller('UpdateStockController',['$scope', '$modal', '$log', '$http',
+
+  	    function ($scope, $modal, $log, $http) {
     	   $scope.productTypes = [];
            
            $http({method : "GET",
@@ -504,7 +533,50 @@ $scope.createInvoice = function(invoiceModel) {
         	 
         	 
          }
-      });
+         
+         $scope.viewStockDetails = function (productId, size) {
+	            $scope.stockLogs = [];
+	            
+	         
+	            
+	            $http({method : "GET",
+			  		   url :"/stocks/getStocksbyId/"+productId,
+			  		   headers : {
+			  			'Content-Type' : 'application/json'   
+			  		   }
+			  		   }
+			  		   ).success(function (response) {
+			  				 
+			  			
+			  			//   $scope.stocks = response;
+			  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+			  			//   $('#successMsg').show();
+			  				  $scope.stockLogs = response.stockLogsList;
+			  		
+			  		
+			  			   
+			  		   }).error(function(error, status){
+			  			  
+			  				//   $('#errorMsg').show();
+			  		   });
+
+	            var modalInstance = $modal.open({
+	                templateUrl: 'viewStockDetails.html',
+	                controller: ModalInstanceCtrl,
+	                size : size,
+	                scope: $scope,
+	                resolve: {
+	                    userForm: function () {
+	                        return $scope.userForm;
+	                    }
+	                }
+	            });
+
+	       
+	        };
+         
+         
+      }]);
       
       mainApp.controller('AddStockController', function($scope, $http) {
           $scope.isDisabled = false;
@@ -759,10 +831,10 @@ $scope.createInvoice = function(invoiceModel) {
   
      $scope.submitForm = function () {
          if ($scope.form.userForm.$valid) {
-             console.log('user form is in scope');
+            // console.log('user form is in scope');
              $modalInstance.close('closed');
          } else {
-             console.log('userform is not in scope');
+         //    console.log('userform is not in scope');
          }
      };
 
