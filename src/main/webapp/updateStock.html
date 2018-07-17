@@ -34,6 +34,8 @@
 						<th>S.No</th>
 						
 						<th>Product Name</th>
+						<th>Quantity</th>
+						<th>Details</th>
 						
 
 					</tr>
@@ -42,10 +44,16 @@
 				<tr ng-repeat="stock in stocks| filter:productName">
 					<td>{{ $index+1 }}</td>
 					<td>{{ stock.code }}-{{ stock.productDesc }}</td>
+					<td>{{stock.quantity}}</td>
+						<td>
+						<button id="editOrderBtn" type="button"
+							class="btn btn btn-primary col-sm-1" style="width: auto"; font-weight:bold;" ng-click="viewStockDetails(stock.productId, 'lg')">View Details</button>
+					</td>
 						<td>
 						<button id="editOrderBtn" type="button"
 							class="btn btn btn-primary col-sm-1" style="width: auto"; font-weight:bold;" ng-click="pushToEdit(stock)">Edit</button>
 					</td>
+				
 					
 
 				</tr>
@@ -75,6 +83,8 @@
 				id="productSubType" data-validation="length alphanumeric" ng-model="stockModel.productSubType" ng-disabled="true"
 				
 			required/>
+			</div>
+			<div class="form-group row" >
 			<label
 				for="productDesc" class="col-sm-1">Product Description:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
@@ -97,9 +107,18 @@
 				id="productName" data-validation="length alphanumeric" ng-model="stockModel.productName" ng-disabled="true"
 				
 			required/>
+			</div>
+			<div class="form-group row" >
+			<label
+				for="productQty" class="col-sm-1">Current Quantity:</label> <input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Product Quantity" name="productQty"
+				id="productQty" data-validation="length alphanumeric" ng-model="stockModel.quantity" ng-disabled="true"
+				
+			required/>
 			
 			<label
-				for="productQty" class="col-sm-1">Product Quantity:</label> <input
+				for="productQty" class="col-sm-1">Add Quantity:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Product Quantity" name="productQty"
 				id="productQty" data-validation="length alphanumeric" ng-model="stockModel.quantityChange" ng-disabled="isDisabled"
@@ -112,6 +131,8 @@
 				id="productQty" data-validation="length alphanumeric" ng-model="stockModel.refId" ng-disabled="isDisabled"
 				
 			required/>
+			</div>
+			<div class="form-group row" >
 				<label
 				for="reason" class="col-sm-1">Reason :</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
@@ -120,6 +141,7 @@
 				
 			required/>
 				
+		</div>
 		</div>
 				
   <button ng-if="!isDisabled" id="editOrderBtn" type="button" class="btn btn btn-primary col-sm-1" style="width:auto";

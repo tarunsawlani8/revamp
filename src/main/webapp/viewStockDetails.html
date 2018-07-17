@@ -1,0 +1,18 @@
+
+<div class="modal-header">
+	<h3 class="modal-title">Stock Logs</h3>
+</div>
+<div class="modal-body">
+	<ul ng-repeat="stock in stockLogs" >
+	<li ng-if="stock.quantityChange >= 0" style="color: green">Added {{stock.quantityChange}} with {{stock.refId}} updated on {{stock.updateDate}}</li>
+	<li ng-if="stock.quantityChange < 0" style="color: red"> Substracted {{-stock.quantityChange}} with {{stock.refId}} updated on {{stock.updateDate}}</li>
+	
+	</ul>
+
+
+
+
+</div>
+<div class="modal-footer">
+	<button class="btn btn-warning" ng-click="cancel()">Dismiss</button>
+</div>
