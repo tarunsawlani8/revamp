@@ -2,10 +2,18 @@ package com.amaropticals.model;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name="invoice")
 public class CreateInvoiceRequest {
 
+	
 	private long invoiceId;
+	
 	private String name;
+	
 	private String email;
 	private String contact;
 	private String refDr;
@@ -22,66 +30,89 @@ public class CreateInvoiceRequest {
 		this.jsonFileName = jsonFileName;
 	}
 	private List<ItemModel> purchaseItems;
+	
+	@XmlElement(name="invoiceid")
 	public long getInvoiceId() {
 		return invoiceId;
 	}
 	public void setInvoiceId(long invoiceId) {
 		this.invoiceId = invoiceId;
 	}
+	@XmlElement(name="name")
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	@XmlElement(name="email")
 	public String getEmail() {
 		return email;
 	}
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	@XmlElement(name="contact")
 	public String getContact() {
 		return contact;
 	}
 	public void setContact(String contact) {
 		this.contact = contact;
 	}
+	
+	@XmlElement(name="referredby")
 	public String getRefDr() {
 		return refDr;
 	}
 	public void setRefDr(String refDr) {
 		this.refDr = refDr;
 	}
+	
+	@XmlElement(name="updatedate")
 	public String getUpdateDate() {
 		return updateDate;
 	}
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
+	
+	@XmlElement(name="deliverydate")
 	public String getDeliveryDate() {
 		return deliveryDate;
 	}
 	public void setDeliveryDate(String deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
+	
+	@XmlElement(name="totalamount")
 	public String getTotalAmount() {
 		return totalAmount;
 	}
 	public void setTotalAmount(String totalAmount) {
 		this.totalAmount = totalAmount;
 	}
+	
+	@XmlElement(name="initialamount")
 	public String getInitialAmount() {
 		return initialAmount;
 	}
 	public void setInitialAmount(String initalAmount) {
 		this.initialAmount = initalAmount;
 	}
+	
+	@XmlElement(name="pendingamount")
 	public String getPendingAmount() {
 		return pendingAmount;
 	}
 	public void setPendingAmount(String pendingAmount) {
 		this.pendingAmount = pendingAmount;
 	}
+	
+	//@XmlElement(name="purchaseitems")
+	@XmlElementWrapper(name="purchaseitems")
+	@XmlElement(name="purchaseitem")
 	public List<ItemModel> getPurchaseItems() {
 		return purchaseItems;
 	}

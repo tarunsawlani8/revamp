@@ -6,7 +6,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 
-@SpringBootApplication(scanBasePackages={"com.amaropticals.controller", "com.amaropticals.restcontroller", "com.amaropticals.dao"})
+@SpringBootApplication(scanBasePackages={"com.amaropticals.controller", "com.amaropticals.common",  "com.amaropticals.restcontroller", "com.amaropticals.dao"})
 //@EnableAutoConfiguration (exclude = { DataSourceAutoConfiguration.class })
 public class StartApp extends SpringBootServletInitializer {
 	

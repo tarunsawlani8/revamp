@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amaropticals.common.CommonUtils;
 import com.amaropticals.dao.StocksDAO;
 import com.amaropticals.filehandling.JSONFileHandler;
 import com.amaropticals.model.AddOrUpdateStockRequest;
@@ -67,12 +68,14 @@ public class StockController {
 
 	}
 
-	@RequestMapping(value = "/getStocksbyId/{id}", method = RequestMethod.GET)
-	public StockModel getStocksbyId(@PathVariable("id") Integer productId) {
-		String sql = "SELECT * from opticals_stocks WHERE product_id="
-				+ productId + ";";
+	@RequestMapping(value = "/getStocksbyId/{productId}", method = RequestMethod.GET)
+	public StockModel getStocksbyId(@PathVariable("productId") Integer productId) {
+		/*String sql = "SELECT * from opticals_stocks WHERE product_id="
+				+ productId + ";";*/
+		
+		StockModel model = (StockModel)JSONFileHandler.readJsonFile(stockPath, "", productId+".json", StockModel.class);
 
-		return stocksDAO.findStocks(sql).get(0);
+		return model;
 	}
 
 	@RequestMapping(value = "/getStocksbyCode/{code}", method = RequestMethod.GET)
