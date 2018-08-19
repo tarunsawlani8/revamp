@@ -37,7 +37,7 @@ public class TaskController {
 		LOGGER.info("Adding Tasking taskId={}, taskStatus={}", model.getTaskId(), model.getTaskStatus());
 
 		String sql = "INSERT INTO opticals_tasks (task_id, task_status, name, delivery_date, update_timestamp, user)"
-				+ " VALUES(?,?,?,?,?);";
+				+ " VALUES(?,?,?,?,?,?);";
 		stocksDAO.addOrUpdateInvoice(sql, model.getTaskId(), model.getTaskStatus(), model.getName(), model.getDeliveryDate(),
 				model.getUpdateTime(), model.getUser());
 		CommonResponse response = new CommonResponse();

@@ -656,7 +656,8 @@ $scope.createInvoice = function(invoiceModel) {
          	 
           };
           
-          $scope.updateTask = function(taskModel) {
+          $scope.updateTask = function(taskModel, disableFlag) {
+        	
         	  
           	 $http({method : "POST",
   		  		   url :"/tasks/updateTasks",
@@ -673,9 +674,10 @@ $scope.createInvoice = function(invoiceModel) {
   		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
   		  			//   $('#successMsg').show();
   		  			
-  		  			$scope.isDisabled = true;
+  		  			$scope.isDisabled = disableFlag;
+  		  			if (disableFlag) {
   		  	  		  $scope.taskList = [];
-  		  		
+  		  			}
   		  			  } 
   		  			   
   		  		   }).error(function(error, status){

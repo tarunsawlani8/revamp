@@ -23,6 +23,8 @@ public class CreateInvoiceRequest {
 	private String initialAmount;
 	private String pendingAmount;
 	private String jsonFileName;
+	private String comments;
+	private boolean withoutDetailsInvoice;
 	public String getJsonFileName() {
 		return jsonFileName;
 	}
@@ -118,6 +120,18 @@ public class CreateInvoiceRequest {
 	}
 	public void setPurchaseItems(List<ItemModel> itemsList) {
 		this.purchaseItems = itemsList;
+	}
+	public String getComments() {
+		return comments;
+	}
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+	public boolean isWithoutDetailsInvoice() {
+		return withoutDetailsInvoice;
+	}
+	public void setWithoutDetailsInvoice(boolean withoutDetailsInvoice) {
+		this.withoutDetailsInvoice = withoutDetailsInvoice;
 	}
 	
 	

@@ -81,7 +81,9 @@ public class InvoiceController {
 				request.getInitialAmount(), request.getUpdateDate(), request.getInvoiceId() + ".json");
 		JSONFileHandler.writeJsonFile(invoicePath, String.valueOf(request.getInvoiceId()).substring(0, 4),
 				request.getJsonFileName(), request);
+		if (!request.isWithoutDetailsInvoice()) {
 		checkAndPopulateTasksAndDate(request);
+		}
 		updateStocks(request);
 
 		CreateInvoiceResponse response = new CreateInvoiceResponse();
