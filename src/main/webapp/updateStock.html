@@ -68,44 +68,36 @@
 			<label for="productId" class="col-sm-1">Product Id:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Product Id" name="customerName" id="productId"
-				data-validation="length alphanumeric" ng-model="stockModel.productId" ng-disabled="true" required  ng-pattern="/^[0-9]*$/"> 
+				data-validation="length alphanumeric" ng-model="stockModel.productId" required  ng-pattern="/^[0-9]*$/"> 
 				<label
 				for="productType" class="col-sm-1">Product Type:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Product Type" name="productType"
-				id="customerContact" data-validation="length alphanumeric" ng-model="stockModel.productType" ng-disabled="true"
-				
-			required/>
+				id="customerContact" data-validation="length alphanumeric" ng-model="stockModel.productType"required/>
 			<label
 				for="productSubType" class="col-sm-1">Product Sub Type:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Product Sub Type" name="productSubType"
-				id="productSubType" data-validation="length alphanumeric" ng-model="stockModel.productSubType" ng-disabled="true"
-				
-			required/>
+				id="productSubType" data-validation="length alphanumeric" ng-model="stockModel.productSubType" required/>
 			</div>
 			<div class="form-group row" >
 			<label
 				for="productDesc" class="col-sm-1">Product Description:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Product Desc" name="productDesc"
-				id="productDesc" data-validation="length alphanumeric" ng-model="stockModel.productDesc" ng-disabled="true"
-				
-			required/>
+				id="productDesc" data-validation="length alphanumeric" ng-model="stockModel.productDesc"required/>
 				<label
 				for="productCode" class="col-sm-1">Box Code:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Product Code" name="productCode"
-				id="productCode" data-validation="length alphanumeric" ng-model="stockModel.code" ng-disabled="true"
-				
+				id="productCode" data-validation="length alphanumeric" ng-model="stockModel.code" 
 			required/>
 			
 			<label
 				for="productName" class="col-sm-1">Product Name:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Product Name" name="productName"
-				id="productName" data-validation="length alphanumeric" ng-model="stockModel.productName" ng-disabled="true"
-				
+				id="productName" data-validation="length alphanumeric" ng-model="stockModel.productName"
 			required/>
 			</div>
 			<div class="form-group row" >
@@ -113,7 +105,7 @@
 				for="productQty" class="col-sm-1">Current Quantity:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Product Quantity" name="productQty"
-				id="productQty" data-validation="length alphanumeric" ng-model="stockModel.quantity" ng-disabled="true"
+				id="productQty" data-validation="length alphanumeric" ng-model="stockModel.quantity" 
 				
 			required/>
 			
@@ -121,7 +113,7 @@
 				for="productQty" class="col-sm-1">Add Quantity:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Product Quantity" name="productQty"
-				id="productQty" data-validation="length alphanumeric" ng-model="stockModel.quantityChange" ng-disabled="isDisabled"
+				id="productQty" data-validation="length alphanumeric" ng-model="stockModel.quantityChange" 
 				
 			required/>
 			<label

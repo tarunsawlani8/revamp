@@ -36,9 +36,9 @@ public class TaskController {
 	public CommonResponse createTasks(@RequestBody TaskModel model) {
 		LOGGER.info("Adding Tasking taskId={}, taskStatus={}", model.getTaskId(), model.getTaskStatus());
 
-		String sql = "INSERT INTO opticals_tasks (task_id, task_status, delivery_date, update_timestamp, user)"
+		String sql = "INSERT INTO opticals_tasks (task_id, task_status, name, delivery_date, update_timestamp, user)"
 				+ " VALUES(?,?,?,?,?);";
-		stocksDAO.addOrUpdateInvoice(sql, model.getTaskId(), model.getTaskStatus(), model.getDeliveryDate(),
+		stocksDAO.addOrUpdateInvoice(sql, model.getTaskId(), model.getTaskStatus(), model.getName(), model.getDeliveryDate(),
 				model.getUpdateTime(), model.getUser());
 		CommonResponse response = new CommonResponse();
 		response.setStatus(AOConstants.SUCCESS_TEXT);

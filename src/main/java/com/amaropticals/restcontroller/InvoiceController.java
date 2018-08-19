@@ -1,7 +1,6 @@
 package com.amaropticals.restcontroller;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -152,6 +151,7 @@ public class InvoiceController {
 				model.setTaskId(request.getInvoiceId() + "-" + count);
 				model.setDeliveryDate(request.getDeliveryDate());
 				TaskModel taskModel = new TaskModel();
+				taskModel.setName(request.getName());
 				taskModel.setTaskId(model.getTaskId());
 				taskModel.setTaskStatus(AOConstants.TASK_IN_PROGRESS);
 				taskModel.setDeliveryDate(model.getDeliveryDate());
@@ -163,7 +163,7 @@ public class InvoiceController {
 						model.getTaskId());
 
 			}
-			CommonUtils.sendMessages(request, "");
+			//CommonUtils.sendMessages(request, "");
 		}
 
 	}

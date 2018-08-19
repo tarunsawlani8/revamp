@@ -1,8 +1,10 @@
 package com.amaropticals.model;
 
 public class TaskModel {
+	
 private String taskId;
 private String taskStatus;
+private String name;
 private String deliveryDate;
 private String updateTime;
 private String user;
@@ -35,6 +37,12 @@ public String getUser() {
 }
 public void setUser(String user) {
 	this.user = user;
+}
+public String getName() {
+	return name;
+}
+public void setName(String name) {
+	this.name = name;
 }
 
 }
