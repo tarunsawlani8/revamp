@@ -70,7 +70,7 @@ public class PDFUtils {
 
 			// Setup XSLT
 			LOGGER.info("File path:" + invoiceXsl + "invoice.xsl");
-			File xsltFile = new File("/home/amaropti/amaropticals/xsl/invoice.xsl");
+			File xsltFile = new File("\\DemoWorld\\revamp\\src\\main\\resources\\invoice.xsl");
 			LOGGER.info("File exists:" + xsltFile.exists());
 
 			Transformer transformer = factory.newTransformer(new StreamSource(xsltFile));
