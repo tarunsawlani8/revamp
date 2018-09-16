@@ -22,13 +22,12 @@ import com.sun.istack.ByteArrayDataSource;
   
 public class MailTEst {  
  public static void main(String[] args) throws FOPException, IOException, TransformerException {  
-  
+ /* 
   String host="host7.dns2dns.com";  
   final String user="admin@amaropticals.in";//change accordingly  
   final String password="$Rajeshnisha8$";//change accordingly  
     
-  String to="monusmart84@gmail.com";//change accordingly  
-  
+ 
 	Properties props = new Properties();
 	props.put("mail.smtp.host", host);
 	props.put("mail.smtp.socketFactory.port", "465"); // SSL Port
@@ -60,7 +59,7 @@ public class MailTEst {
      MimeBodyPart messageBodyPart2 = new MimeBodyPart();  
    
      String filename = "invoice.pdf";//change accordingly  
-     PDFUtils n = new PDFUtils();
+*/     PDFUtils n = new PDFUtils();
      CreateInvoiceRequest model = new CreateInvoiceRequest();
      model.setInvoiceId(18070601);
      model.setTotalAmount("120");
@@ -102,6 +101,8 @@ public class MailTEst {
      item2.setRightEye(Arrays.asList(righteye0, righteye1));
      model.setPurchaseItems(Arrays.asList(item,item2 ));
      
+     String to="monusmart84@gmail.com";//change accordingly  
+     
      MailUtils.sendMail(to, "Your purchase at Amar Opticals Invoice Id:"+ model.getInvoiceId(), model);
 /*        DataSource source = new ByteArrayDataSource(n.convertToPDF(model), "application/pdf");  
      messageBodyPart2.setDataHandler(new DataHandler(source));  
@@ -122,6 +123,6 @@ public class MailTEst {
   
      System.out.println("message sent successfully...");*/  
    
-     } catch (MessagingException e) {e.printStackTrace();}  
+  //   } catch (MessagingException e) {e.printStackTrace();}  
  }  
 }  

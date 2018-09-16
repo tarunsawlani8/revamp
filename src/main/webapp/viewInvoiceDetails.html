@@ -52,7 +52,7 @@
 						<td style="padding: 5px">AXIAL</td>
 						<td style="padding: 5px">SPH</td>
 						<td style="padding: 5px">CYL</td>
-						<td style="padding: 5px" >AXIAL</td>
+						<td style="padding: 5px">AXIAL</td>
 					</tr>
 					<tr>
 						<td>D.V</td>
@@ -77,7 +77,7 @@
 
 			</td>
 
-
+			<td>{{items.purchaseCode}}</td>
 			<td>{{items.buyQuantity}}</td>
 			<td>{{items.unitPrice}}</td>
 			<td>{{items.totalCost = items.buyQuantity * items.unitPrice}}</td>
@@ -86,10 +86,9 @@
 		</tr>
 	</table>
 
-<div>
-			<label for="productType">Comments:</label>
-			{{invoiceModel.comments}} 
-		</div>
+	<div>
+		<label for="productType">Comments:</label> {{invoiceModel.comments}}
+	</div>
 
 
 </div>

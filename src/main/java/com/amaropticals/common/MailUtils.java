@@ -36,10 +36,10 @@ public class MailUtils {
 		if (props == null) {
 			props = new Properties();
 			props.put("mail.smtp.host", host);
-			props.put("mail.smtp.socketFactory.port", "465"); // SSL Port
-			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); // SSL Factory Class
+		//	props.put("mail.smtp.socketFactory.port", "465"); // SSL Port
+		//	props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); // SSL Factory Class
 			props.put("mail.smtp.auth", "true"); // Enabling SMTP Authentication
-			props.put("mail.smtp.port", "465"); // SMTP Port
+			props.put("mail.smtp.port", "587"); // SMTP Port
 		}
 
 	}
@@ -93,6 +93,7 @@ public class MailUtils {
 			Transport.send(message);
 
 			LOGGER.info("Mail sent successfully to={}", toAddress);
+		
 
 		} catch (Exception e) {
 			LOGGER.error("Can't send mail to={}, due to exception={}", toAddress, e);
