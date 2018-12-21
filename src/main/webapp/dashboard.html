@@ -194,6 +194,7 @@
          
          
          $scope.productTypes = [];
+         $scope.productName = "";
          
          $http({method : "GET",
     		   url :"/stocks/getStocksType", 
@@ -431,6 +432,44 @@ $scope.createInvoice = function(invoiceModel) {
      		 window.open("/invoices/downloadInvoice/"+invoiceId);
      		
      		 
+     	 };
+     	 
+     	 $scope.findCustomer = function(phNumber) {
+     		var customerModel = {
+       		      name: "",
+    	            contact: phNumber,
+    	            email: ""
+       		 };
+       		$http({method : "POST",
+  		  		   url :"/customers/findCustomer",
+  		  		   data : customerModel,
+  		  		 
+  		  		   headers : {
+  		  			'Content-Type' : 'application/json'   
+  		  		   }
+  		  		   }
+  		  		   ).success(function (response) {
+  		  		     
+  		  		       
+  		  		       
+  		  				 if (response.length >= 1)
+  		  		 	{
+  		  					 $scope.invoiceModel.name = response[0].name;
+  		  					$scope.invoiceModel.email = response[0].email; 
+  		  					 
+  		  		 	} else {
+  		  		 	    	 $scope.invoiceModel.name = "";
+  		  					$scope.invoiceModel.email = "";
+  		  		 	}
+  		  		 	
+  		  		 
+  		  		
+  		  			   
+  		  		   }).error(function(error, status){
+  		  			  
+  		  				//   $('#errorMsg').show();
+  		  		   });
+       
      	 };
      
  

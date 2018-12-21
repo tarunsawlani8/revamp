@@ -34,15 +34,17 @@
 				<tr ng-if="stocks.length > 0">
 					<th>S.No</th>
 
+					<th>Product Code</th>
 					<th>Product Name</th>
 
 
 				</tr>
 			</thead>
 
-			<tr ng-repeat="stock in stocks| filter:productName">
+			<tr ng-repeat="stock in stocks| filter:{productDesc : productName}">
 				<td>{{ $index+1 }}</td>
-				<td>{{ stock.code }}-{{ stock.productDesc }}</td>
+				<td>{{ stock.code }}</td>
+				<td>{{ stock.productDesc }}</td>
 				<td>
 					<button id="editOrderBtn" type="button"
 						class="btn btn btn-primary col-sm-1" style="width: auto"
@@ -244,18 +246,21 @@
 		<div class="form-group row"
 			ng-if="invoiceModel.purchaseItems.length> 0  && !invoiceModel.withoutDetailsInvoice">
 
-			<label for="customerName" class="col-sm-1">Customer Name:</label> <input
-				type="text" class="form-control col-sm-2" style="width: 20%;"
-				placeholder="Customer Name" name="customerName" id="customerName"
-				data-validation="length alphanumeric" ng-model="invoiceModel.name"
-				ng-disabled="isDisabled" required ng-pattern="/^[a-zA-Z. ]*$/">
+	
 			<label for="customerContact" class="col-sm-1">Customer
 				Contact:</label> <input type="text" class="form-control col-sm-2"
 				style="width: 20%;" placeholder="Customer Contact"
 				name="customerContact" id="customerContact"
 				data-validation="length alphanumeric"
 				ng-model="invoiceModel.contact" ng-disabled="isDisabled" required
-				ng-pattern="/^[0-9]*$/" ng-minlength="10" ng-maxlength="10" /> <label
+				ng-pattern="/^[0-9]*$/" ng-minlength="10" ng-maxlength="10" ng-blur="findCustomer(invoiceModel.contact)"/> 
+				<label for="customerName" class="col-sm-1">Customer Name:</label> <input
+				type="text" class="form-control col-sm-2" style="width: 20%;"
+				placeholder="Customer Name" name="customerName" id="customerName"
+				data-validation="length alphanumeric" ng-model="invoiceModel.name"
+				ng-disabled="isDisabled" required ng-pattern="/^[a-zA-Z. ]*$/">
+				
+				<label
 				for="customerEmail" class="col-sm-1">Customer Email:</label> <input
 				type="text" class="form-control col-sm-2" style="width: 20%;"
 				placeholder="Customer Email" name="customerEmail" id="customerEmail"

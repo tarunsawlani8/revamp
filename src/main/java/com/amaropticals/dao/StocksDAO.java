@@ -12,10 +12,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.amaropticals.common.CommonUtils;
+import com.amaropticals.daomapper.CustomerModelMapper;
 import com.amaropticals.daomapper.InvoiceModelMapper;
 import com.amaropticals.daomapper.StockModelMapper;
 import com.amaropticals.daomapper.TaskModelMapper;
 import com.amaropticals.model.CreateInvoiceRequest;
+import com.amaropticals.model.CustomerModel;
 import com.amaropticals.model.StockModel;
 import com.amaropticals.model.TaskModel;
 
@@ -47,6 +49,13 @@ public class StocksDAO {
 	public List<CreateInvoiceRequest> findInvoices(String sql) {
 
 		List<CreateInvoiceRequest> list = stockJdbcTemplate.query(sql, new InvoiceModelMapper());
+		return list;
+
+	}
+	
+	public List<CustomerModel> findCustomer(String sql) {
+
+		List<CustomerModel> list = stockJdbcTemplate.query(sql, new CustomerModelMapper());
 		return list;
 
 	}
