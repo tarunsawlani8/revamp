@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -33,11 +34,14 @@ import com.amaropticals.common.AOConstants;
 import com.amaropticals.common.CommonUtils;
 import com.amaropticals.common.MailUtils;
 import com.amaropticals.common.PDFUtils;
-import com.amaropticals.dao.StocksDAO;
+import com.amaropticals.dao.GenericDAO;
 import com.amaropticals.filehandling.JSONFileHandler;
+import com.amaropticals.model.AOError;
 import com.amaropticals.model.AddOrUpdateStockRequest;
 import com.amaropticals.model.CreateInvoiceRequest;
 import com.amaropticals.model.CreateInvoiceResponse;
+import com.amaropticals.model.CustomerListResponse;
+import com.amaropticals.model.InvoiceListResponse;
 import com.amaropticals.model.ItemModel;
 import com.amaropticals.model.TaskModel;
 
@@ -48,7 +52,7 @@ public class InvoiceController {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private StocksDAO stocksDAO;
+	private GenericDAO stocksDAO;
 
 	@Autowired
 	private StockController stockController;
@@ -60,46 +64,52 @@ public class InvoiceController {
 	private String invoicePath;
 
 	@RequestMapping(value = "/createInvoice", method = RequestMethod.POST)
-	public CreateInvoiceResponse createInvoice(@RequestBody CreateInvoiceRequest request) {
+	public ResponseEntity<CreateInvoiceResponse> createInvoice(HttpServletRequest request,
+			@RequestBody CreateInvoiceRequest invoiceRequest) {
 
-		request.setInvoiceId(CommonUtils.getNextInvoiceId());
-		request.setJsonFileName(request.getInvoiceId() + ".json");
+		CreateInvoiceResponse response = new CreateInvoiceResponse();
+		if (!CommonUtils.checkAuthentication(request)) {
+			response.setError(new AOError(2, "Un-Authorized access.Please login again"));
+			return new ResponseEntity<CreateInvoiceResponse>(response, HttpStatus.OK);
 
-		request.setUpdateDate(Timestamp.valueOf(LocalDateTime.now()).toString());
+		}
+		invoiceRequest.setInvoiceId(CommonUtils.getNextInvoiceId());
+		invoiceRequest.setJsonFileName(invoiceRequest.getInvoiceId() + ".json");
 
-		if (StringUtils.isBlank(request.getDeliveryDate())) {
-			request.setDeliveryDate(request.getUpdateDate().substring(0, 10));
+		invoiceRequest.setUpdateDate(Timestamp.valueOf(LocalDateTime.now()).toString());
+
+		if (StringUtils.isBlank(invoiceRequest.getDeliveryDate())) {
+			invoiceRequest.setDeliveryDate(invoiceRequest.getUpdateDate().substring(0, 10));
 
 		} else {
-			request.setDeliveryDate(request.getDeliveryDate().substring(0, 10));
+			invoiceRequest.setDeliveryDate(invoiceRequest.getDeliveryDate().substring(0, 10));
 
 		}
 
 		String sql = "INSERT INTO opticals_invoices (invoice_id, name , email , contact, delivery_date, total_amount,"
 				+ " initial_amount, update_timestamp, json_file_name) VALUES (?, ?, ?, ?, ?,?,?,?,?)";
-		stocksDAO.addOrUpdateInvoice(sql, request.getInvoiceId(), request.getName(), request.getEmail(),
-				request.getContact(), Date.valueOf(request.getDeliveryDate()), request.getTotalAmount(),
-				request.getInitialAmount(), request.getUpdateDate(), request.getInvoiceId() + ".json");
-		JSONFileHandler.writeJsonFile(invoicePath, String.valueOf(request.getInvoiceId()).substring(0, 4),
-				request.getJsonFileName(), request);
-		if (!request.isWithoutDetailsInvoice()) {
-			checkAndPopulateTasksAndDate(request);
+		stocksDAO.addOrUpdateInvoice(sql, invoiceRequest.getInvoiceId(), invoiceRequest.getName(),
+				invoiceRequest.getEmail(), invoiceRequest.getContact(), Date.valueOf(invoiceRequest.getDeliveryDate()),
+				invoiceRequest.getTotalAmount(), invoiceRequest.getInitialAmount(), invoiceRequest.getUpdateDate(),
+				invoiceRequest.getInvoiceId() + ".json");
+		JSONFileHandler.writeJsonFile(invoicePath, String.valueOf(invoiceRequest.getInvoiceId()).substring(0, 4),
+				invoiceRequest.getJsonFileName(), invoiceRequest);
+		if (!invoiceRequest.isWithoutDetailsInvoice()) {
+			checkAndPopulateTasksAndDate(invoiceRequest);
 		}
-		updateStocks(request);
+		updateStocks(invoiceRequest);
 
-		if (StringUtils.isNotBlank(request.getEmail())) {
-			MailUtils.sendMail(request.getEmail(),
-					"Your purchase at Amar Opticals Invoice Id:" + request.getInvoiceId(), request);
+		if (StringUtils.isNotBlank(invoiceRequest.getEmail())) {
+			MailUtils.sendMail(invoiceRequest.getEmail(),
+					"Your purchase at Amar Opticals Invoice Id:" + invoiceRequest.getInvoiceId(), invoiceRequest);
 		}
 
-		CreateInvoiceResponse response = new CreateInvoiceResponse();
-		response.setStatus("success");
-		response.setResponse(request);
-		return response;
+		response.setResponse(invoiceRequest);
+		return new ResponseEntity<CreateInvoiceResponse>(response, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/getInvoicesByMonth/{yymm}", method = RequestMethod.GET)
-	public List<CreateInvoiceRequest> getInvoicesByMonth(@PathVariable("yymm") long yymm) {
+	public List<CreateInvoiceRequest> getInvoicesByMonth(HttpServletRequest request, @PathVariable("yymm") long yymm) {
 
 		String startInvoice = yymm + "0100";
 		String endInvoice = yymm + "3200";
@@ -110,20 +120,44 @@ public class InvoiceController {
 		return stocksDAO.findInvoices(sql);
 	}
 
-	@RequestMapping(value = "/getInvoice/{invoiceId}", method = RequestMethod.GET)
-	public CreateInvoiceRequest getInvoice(@PathVariable("invoiceId") long invoiceId) {
+	@RequestMapping(value = "/getInvoicesByYear/{yy}", method = RequestMethod.GET)
+	public ResponseEntity<InvoiceListResponse> getInvoicesByYear(HttpServletRequest request,
+			@PathVariable("yy") long yy) {
+		InvoiceListResponse response = new InvoiceListResponse();
+		if (!CommonUtils.checkAuthentication(request)) {
+			response.setError(new AOError(2, "Un-Authorized access.Please login again"));
+			return new ResponseEntity<InvoiceListResponse>(response, HttpStatus.OK);
 
-		CreateInvoiceRequest model = (CreateInvoiceRequest) JSONFileHandler.readJsonFile(invoicePath,
-				String.valueOf(invoiceId).substring(0, 4), String.valueOf(invoiceId) + ".json",
-				CreateInvoiceRequest.class);
-		return model;
+		}
+		String startInvoice = yy + "010100";
+		String endInvoice = yy + "123200";
+
+		String sql = "SELECT * FROM opticals_invoices WHERE invoice_id > " + Long.valueOf(startInvoice)
+				+ " AND invoice_id < " + Long.valueOf(endInvoice) + ";";
+
+		response.setInvoiceList(stocksDAO.findInvoices(sql));
+		return new ResponseEntity<InvoiceListResponse>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/getInvoice/{invoiceId}", method = RequestMethod.GET)
+	public ResponseEntity<CreateInvoiceRequest> getInvoice(HttpServletRequest request,
+			@PathVariable("invoiceId") long invoiceId) {
+		CreateInvoiceRequest model = new CreateInvoiceRequest();
+
+		if (!CommonUtils.checkAuthentication(request)) {
+			model.setError(new AOError(2, "Un-Authorized access.Please login again"));
+			return new ResponseEntity<CreateInvoiceRequest>(model, HttpStatus.OK);
+
+		}
+
+		return new ResponseEntity<CreateInvoiceRequest>(getModelInvoice(invoiceId), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/downloadInvoice/{invoiceId}", method = RequestMethod.GET, produces = "application/pdf")
-	public ResponseEntity<InputStreamResource> downloadInvoice(@PathVariable("invoiceId") long invoiceId)
-			throws FOPException, IOException, TransformerException {
-
-		CreateInvoiceRequest model = getInvoice(invoiceId);
+	public InputStreamResource downloadInvoice(HttpServletRequest request,
+			@PathVariable("invoiceId") long invoiceId) throws FOPException, IOException, TransformerException {
+		
+		CreateInvoiceRequest model = getModelInvoice(invoiceId);
 		LOGGER.info("Read model from json file, invoiceId={}", model.getInvoiceId());
 		PDFUtils utils = new PDFUtils();
 		byte[] out = utils.convertToPDF(model);
@@ -139,8 +173,7 @@ public class InvoiceController {
 		headers.setContentLength(out.length);
 
 		ByteArrayInputStream aa = new ByteArrayInputStream(out);
-		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(
-				new InputStreamResource(aa), headers, HttpStatus.OK);
+		InputStreamResource response = new InputStreamResource(aa);
 		return response;
 	}
 
@@ -193,5 +226,13 @@ public class InvoiceController {
 
 		}
 
+	}
+
+	protected CreateInvoiceRequest getModelInvoice(long invoiceId) {
+		CreateInvoiceRequest model = (CreateInvoiceRequest) JSONFileHandler.readJsonFile(invoicePath,
+				String.valueOf(invoiceId).substring(0, 4), String.valueOf(invoiceId) + ".json",
+				CreateInvoiceRequest.class);
+
+		return model;
 	}
 }

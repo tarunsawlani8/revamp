@@ -1,6 +1,6 @@
 package com.amaropticals.model;
 
-public class CommonResponse {
+public class CommonResponse extends CommonResponseModel {
 
 	private String status;
 	public String getStatus() {
