@@ -194,6 +194,7 @@
          
          
          $scope.productTypes = [];
+         $scope.productName = "";
          
          $http({method : "GET",
     		   url :"/stocks/getStocksType", 
@@ -432,6 +433,44 @@ $scope.createInvoice = function(invoiceModel) {
      		
      		 
      	 };
+     	 
+     	 $scope.findCustomer = function(phNumber) {
+     		var customerModel = {
+       		      name: "",
+    	            contact: phNumber,
+    	            email: ""
+       		 };
+       		$http({method : "POST",
+  		  		   url :"/customers/findCustomer",
+  		  		   data : customerModel,
+  		  		 
+  		  		   headers : {
+  		  			'Content-Type' : 'application/json'   
+  		  		   }
+  		  		   }
+  		  		   ).success(function (response) {
+  		  		     
+  		  		       
+  		  		       
+  		  				 if (response.length >= 1)
+  		  		 	{
+  		  					 $scope.invoiceModel.name = response[0].name;
+  		  					$scope.invoiceModel.email = response[0].email; 
+  		  					 
+  		  		 	} else {
+  		  		 	    	 $scope.invoiceModel.name = "";
+  		  					$scope.invoiceModel.email = "";
+  		  		 	}
+  		  		 	
+  		  		 
+  		  		
+  		  			   
+  		  		   }).error(function(error, status){
+  		  			  
+  		  				//   $('#errorMsg').show();
+  		  		   });
+       
+     	 };
      
  
       });
@@ -656,7 +695,8 @@ $scope.createInvoice = function(invoiceModel) {
          	 
           };
           
-          $scope.updateTask = function(taskModel) {
+          $scope.updateTask = function(taskModel, disableFlag) {
+        	
         	  
           	 $http({method : "POST",
   		  		   url :"/tasks/updateTasks",
@@ -673,9 +713,10 @@ $scope.createInvoice = function(invoiceModel) {
   		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
   		  			//   $('#successMsg').show();
   		  			
-  		  			$scope.isDisabled = true;
+  		  			$scope.isDisabled = disableFlag;
+  		  			if (disableFlag) {
   		  	  		  $scope.taskList = [];
-  		  		
+  		  			}
   		  			  } 
   		  			   
   		  		   }).error(function(error, status){

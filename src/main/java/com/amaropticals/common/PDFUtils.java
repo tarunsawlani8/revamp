@@ -2,10 +2,7 @@ package com.amaropticals.common;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringReader;
-import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -73,7 +70,7 @@ public class PDFUtils {
 
 			// Setup XSLT
 			LOGGER.info("File path:" + invoiceXsl + "invoice.xsl");
-			File xsltFile = new File("\\DemoWorld\\revamp\\src\\main\\resources\\invoice.xsl");
+			File xsltFile = new File("/home/amaropti/amaropticals/xsl/invoice.xsl");
 			LOGGER.info("File exists:" + xsltFile.exists());
 
 			Transformer transformer = factory.newTransformer(new StreamSource(xsltFile));

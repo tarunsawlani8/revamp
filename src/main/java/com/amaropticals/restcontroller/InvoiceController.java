@@ -1,7 +1,6 @@
 package com.amaropticals.restcontroller;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -32,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.amaropticals.common.AOConstants;
 import com.amaropticals.common.CommonUtils;
+import com.amaropticals.common.MailUtils;
 import com.amaropticals.common.PDFUtils;
 import com.amaropticals.dao.StocksDAO;
 import com.amaropticals.filehandling.JSONFileHandler;
@@ -82,8 +82,15 @@ public class InvoiceController {
 				request.getInitialAmount(), request.getUpdateDate(), request.getInvoiceId() + ".json");
 		JSONFileHandler.writeJsonFile(invoicePath, String.valueOf(request.getInvoiceId()).substring(0, 4),
 				request.getJsonFileName(), request);
-		checkAndPopulateTasksAndDate(request);
+		if (!request.isWithoutDetailsInvoice()) {
+			checkAndPopulateTasksAndDate(request);
+		}
 		updateStocks(request);
+
+		if (StringUtils.isNotBlank(request.getEmail())) {
+			MailUtils.sendMail(request.getEmail(),
+					"Your purchase at Amar Opticals Invoice Id:" + request.getInvoiceId(), request);
+		}
 
 		CreateInvoiceResponse response = new CreateInvoiceResponse();
 		response.setStatus("success");
@@ -125,10 +132,9 @@ public class InvoiceController {
 		headers.add("Access-Control-Allow-Origin", "*");
 		headers.add("Access-Control-Allow-Methods", "GET, POST, PUT");
 		headers.add("Access-Control-Allow-Headers", "Content-Type");
-		headers.add("Content-Disposition", "attachment;filename="+String.valueOf(invoiceId)+".pdf");
+		headers.add("Content-Disposition", "attachment;filename=" + String.valueOf(invoiceId) + ".pdf");
 		headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
 		headers.add("Pragma", "no-cache");
-
 
 		headers.setContentLength(out.length);
 
@@ -152,6 +158,7 @@ public class InvoiceController {
 				model.setTaskId(request.getInvoiceId() + "-" + count);
 				model.setDeliveryDate(request.getDeliveryDate());
 				TaskModel taskModel = new TaskModel();
+				taskModel.setName(request.getName());
 				taskModel.setTaskId(model.getTaskId());
 				taskModel.setTaskStatus(AOConstants.TASK_IN_PROGRESS);
 				taskModel.setDeliveryDate(model.getDeliveryDate());
@@ -163,7 +170,7 @@ public class InvoiceController {
 						model.getTaskId());
 
 			}
-			CommonUtils.sendMessages(request, "");
+			// CommonUtils.sendMessages(request, "");
 		}
 
 	}
