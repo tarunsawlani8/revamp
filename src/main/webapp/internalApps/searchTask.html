@@ -39,14 +39,19 @@
 						<th>S.No</th>
 						
 						<th>Task Details</th>
-						
+						<th>Task Status</th>
 
 					</tr>
 				</thead>
 
-				<tr ng-repeat="task in taskList">
+				<tr ng-repeat="task in taskList | orderBy : 'taskId'">
 					<td>{{ $index+1 }}</td>
-					<td>{{ task.taskId }}-{{ task.taskStatus}}-{{task.deliveryDate}}</td>
+					<td>{{ task.taskId }}-{{ task.name}}-{{task.deliveryDate}}
+					</td>
+					<td>	<select ng-model="task.taskStatus" 
+				 class="form-control col-sm-2" style="width: auto;"
+				 ng-options="task for task in taskStatusList" required ng-change="updateTask(task, false)" ></select>
+			</td>
 						<td>
 						<button id="editOrderBtn" type="button"
 							class="btn btn btn-primary col-sm-1" style="width: auto"; font-weight:bold;" ng-click="pushToEdit(task)">Edit</button>
@@ -92,7 +97,7 @@
 		
 				
   <button ng-if="!isDisabled" id="editOrderBtn" type="button" class="btn btn btn-primary col-sm-1" style="width:auto";
-   ng-click="updateTask(taskModel)"
+   ng-click="updateTask(taskModel, true)"
    ng-disabled="updateTaskForm.$invalid"
    font-weight:bold;">Update Task</button>
    <a ng-if="isDisabled" 

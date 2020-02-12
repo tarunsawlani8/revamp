@@ -17,6 +17,7 @@ public class TaskModelMapper implements RowMapper<TaskModel> {
 		model.setDeliveryDate(String.valueOf(rs.getDate("delivery_date")));
 		model.setUpdateTime(String.valueOf(rs.getTimestamp("update_timestamp")));
 		model.setUser(rs.getString("user"));
+		model.setName(rs.getString("name"));
 		return model;
 	}
 

@@ -2,9 +2,7 @@ package com.amaropticals.restcontroller;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amaropticals.common.CommonUtils;
 import com.amaropticals.dao.StocksDAO;
 import com.amaropticals.filehandling.JSONFileHandler;
 import com.amaropticals.model.AddOrUpdateStockRequest;
@@ -103,7 +100,7 @@ public class StockController {
 		log.setQuantityChange(request.getQuantityChange());
 		log.setReason(request.getReason());
 		log.setRefId(request.getRefId());
-		log.setUpdateDate(request.getUpdateDate());
+		log.setUpdateDate(String.valueOf(Timestamp.valueOf(LocalDateTime.now())));
 		log.setUser(request.getUser());
 
 		model.getStockLogsList().add(log);
