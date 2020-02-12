@@ -5,10 +5,14 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,16 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.amaropticals.common.AOConstants;
 import com.amaropticals.common.CommonUtils;
-import com.amaropticals.dao.StocksDAO;
+import com.amaropticals.dao.GenericDAO;
+import com.amaropticals.model.AOError;
 import com.amaropticals.model.CommonResponse;
 import com.amaropticals.model.TaskModel;
+import com.amaropticals.model.TaskModelList;
 
 @RequestMapping("/tasks")
 @RestController
 public class TaskController {
 
 	@Autowired
-	private StocksDAO stocksDAO;
+	private GenericDAO stocksDAO;
 
 	@Autowired
 	private InvoiceController invoiceController;
@@ -34,20 +40,34 @@ public class TaskController {
 
 	@RequestMapping(value = "/createTasks", method = RequestMethod.POST)
 	public CommonResponse createTasks(@RequestBody TaskModel model) {
+		CommonResponse response = new CommonResponse();
+		
 		LOGGER.info("Adding Tasking taskId={}, taskStatus={}", model.getTaskId(), model.getTaskStatus());
 
 		String sql = "INSERT INTO opticals_tasks (task_id, task_status, name, delivery_date, update_timestamp, user)"
 				+ " VALUES(?,?,?,?,?,?);";
 		stocksDAO.addOrUpdateInvoice(sql, model.getTaskId(), model.getTaskStatus(), model.getName(), model.getDeliveryDate(),
 				model.getUpdateTime(), model.getUser());
-		CommonResponse response = new CommonResponse();
+		
 		response.setStatus(AOConstants.SUCCESS_TEXT);
 		return response;
 
 	}
 
 	@RequestMapping(value = "/searchTasks", method = RequestMethod.POST)
-	public List<TaskModel> searchTasks(@RequestBody TaskModel model) {
+	public ResponseEntity<TaskModelList> searchTasks(HttpServletRequest request, @RequestBody TaskModel model) {
+		TaskModelList response = new TaskModelList();
+		if (!CommonUtils.checkAuthentication(request)) {
+			response.setError(new AOError(2, "Un-Authorized access.Please login again"));
+			return new ResponseEntity<TaskModelList>(response, HttpStatus.OK);
+
+		}
+		List<TaskModel> taskModelList = searchTaskGen(model);
+		response.setTaskModelList(taskModelList);
+		return new ResponseEntity<TaskModelList>(response, HttpStatus.OK);
+	}
+
+	private List<TaskModel> searchTaskGen(TaskModel model) {
 		LOGGER.info("Search Tasking taskId={}, taskStatus={}", model.getTaskId(), model.getTaskStatus());
 
 		String sql = "SELECT * from opticals_tasks;";
@@ -64,14 +84,20 @@ public class TaskController {
 
 			sql = "SELECT * from opticals_tasks ;";
 		}
-
-		return stocksDAO.findTasks(sql);
+	List<TaskModel>	taskModelList = stocksDAO.findTasks(sql);
+		return taskModelList;
 	}
 
 	@RequestMapping(value = "/updateTasks", method = RequestMethod.POST)
-	public CommonResponse updateTasks(@RequestBody TaskModel model) {
+	public ResponseEntity<CommonResponse> updateTasks(HttpServletRequest request,@RequestBody TaskModel model) {
 		LOGGER.info("Updating Tasking taskId={}, taskStatus={}", model.getTaskId(), model.getTaskStatus());
-		TaskModel oldModel = searchTasks(model).get(0);
+		CommonResponse response = new CommonResponse();
+		if (!CommonUtils.checkAuthentication(request)) {
+			response.setError(new AOError(2, "Un-Authorized access.Please login again"));
+			return new ResponseEntity<CommonResponse>(response, HttpStatus.OK);
+
+		}
+		TaskModel oldModel = searchTaskGen(model).get(0);
 
 		model.setTaskId(oldModel.getTaskId());
 		model.setDeliveryDate(model.getDeliveryDate().substring(0,10));
@@ -79,11 +105,11 @@ public class TaskController {
 		stocksDAO.addOrUpdateInvoice(sql, model.getTaskStatus(), model.getDeliveryDate(),
 				Timestamp.valueOf(LocalDateTime.now()), model.getUser(), model.getTaskId());
 		if ("READY FOR PICKUP".equalsIgnoreCase(model.getTaskStatus())) {
-			CommonUtils.sendMessages(invoiceController.getInvoice(Long.valueOf(model.getTaskId().split("-")[0])),
+			CommonUtils.sendMessages(invoiceController.getModelInvoice(Long.valueOf(model.getTaskId().split("-")[0])),
 					model.getTaskStatus());
 		}
-		CommonResponse response = new CommonResponse();
+		
 		response.setStatus(AOConstants.SUCCESS_TEXT);
-		return response;
+		return new ResponseEntity<CommonResponse>(response, HttpStatus.OK);
 	}
 }

@@ -1,123 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-      <link rel="shortcut icon" href="favicon.ico"  type="image/x-icon"/>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 
-    <title>Amar Opticals | Eyeglasses, Sunglasses & Contact Lenses</title>
+<title>Amar Opticals | Eyeglasses, Sunglasses & Contact Lenses</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap theme -->
-    <link href="../../dist/css/bootstrap-theme.min.css" rel="stylesheet">
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+<!-- Bootstrap core CSS -->
+<link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap theme -->
+<link href="../../dist/css/bootstrap-theme.min.css" rel="stylesheet">
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<link href="../../assets/css/ie10-viewport-bug-workaround.css"
+	rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="theme.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="theme.css" rel="stylesheet">
 
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
-      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="../../resources/demos/style.css">
-  <link rel="stylesheet" href="../../loader_2.css">
-    
-  
-  </head>
 
-  <body ng-app="mainApp">
-  <div class="loading-dialog" data-loading > </div>
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="../../resources/demos/style.css">
+<link rel="stylesheet" href="../../loader_2.css">
 
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="home.html">AMAR OPTICALS.IN</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li ><a href="#/getMessageBalance">Home</a></li>
-           <li class="dropdown">
-            
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Invoice<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                      <li><a href="#/createInvoice">Add Invoice</a></li>
-                <li><a href="#/viewInvoice">View Invoice</a></li>
-                
-              </ul>
-            
-            </li>
-             <li class="dropdown">
-            
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Stocks<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                      <li><a href="#/addStock">Add Stock</a></li>
-                <li><a href="#/updateStock">Update Stock</a></li>
-                
-              </ul>
-            
-            </li>
-             <li class="dropdown">
-            
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tasks<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                      <li><a href="#/searchTask">Search Task</a></li>
-                
-              </ul>
-            
-            </li>
-            
-            <li class="active" style="align:right;"><a href="#about">Hello</a></li>
-			<li ><a  href="home.html" style="align:right;">Logout</a></li>
-     
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-    
-    
+
+</head>
+
+<body ng-app="mainApp">
+	<div class="loading-dialog" data-loading></div>
+
+	<!-- Fixed navbar -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="home.html">AMAR OPTICALS.IN</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse" ng-if="authenicated">
+				<ul class="nav navbar-nav">
+					<li><a href="#/getMessageBalance">Home</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Invoice<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#/createInvoice">Add Invoice</a></li>
+							<li><a href="#/viewInvoice">View Invoice</a></li>
+
+						</ul></li>
+			
+					<li ng-if="admin" class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Stocks<span class="caret" ></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#/addStock">Add Stock</a></li>
+							<li><a href="#/updateStock">Update Stock</a></li>
+
+						</ul></li>
+					
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Tasks<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#/searchTask">Search Task</a></li>
+
+						</ul></li>
+						
+					<li ng-if="admin" class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Reports<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#/sendReport">Send Report</a></li>
+
+						</ul></li>
+					
+
+					<li class="active" style="align: right;"><a href="#about">Hello,<span>{{name}}</span></a></li>
+					<li><a href="#/logout" style="align: right;">Logout</a></li>
+
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</nav>
+
+	<div ng-if="isError" class="alert alert-warning">
+		{{errorCode}}-{{errorMessage}}</div>
+	<div ng-if="systemError" class="alert alert-danger">
+		<Strong>6</Strong>-Technical Difficulties.Please try again later.
+
+	</div>
+
 	<div ng-view></div>
-	
-    
-    <!-- /container -->
 
-    <!-- Bootstrap core JavaScript
+
+	<!-- /container -->
+
+	<!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-       <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular-route.min.js"></script>
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>
-    
-          <script type="text/javascript" src="js/app.js"></script>
-     <script type="text/javascript" src="js/InvoiceController.js"></script>
-  
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <script src="../../assets/js/docs.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-   
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script type="text/javascript"
+		src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+	<script type="text/javascript"
+		src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular-route.min.js"></script>
+	<script
+		src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>
+
+	<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="js/InvoiceController.js"></script>
+
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+	<script src="../../dist/js/bootstrap.min.js"></script>
+	<script src="../../assets/js/docs.min.js"></script>
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
 
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
@@ -142,7 +161,14 @@
 		}]);
       mainApp.config(['$routeProvider', function($routeProvider) {
          $routeProvider.
-         
+         when('/login', {
+             templateUrl: 'login.html',
+             controller: 'LoginController'
+          }).
+          when('/logout', {
+              templateUrl: 'login.html',
+              controller: 'LogoutController'
+           }).
          when('/createInvoice', {
             templateUrl: 'createInvoice.html',
             controller: 'AddInvoiceController'
@@ -168,17 +194,19 @@
                 templateUrl: 'messageBalance.html',
                 controller: 'MessageController'
              }).
-   
-           
+             when('/sendReport', {
+                 templateUrl: 'sendReport.html',
+                 controller: 'ReportsController'
+              }).       
            otherwise({
-            redirectTo: '/getMessageBalance'
+            redirectTo: '/login'
          });
       }]);
       
  	</script>
-      
-    <script>  
-      mainApp.controller('AddInvoiceController', function($scope, $http) {
+
+	<script>  
+      mainApp.controller('AddInvoiceController', function($scope, $http, $localstorage, $location, $rootScope) {
          $scope.withoutDetailsInvoice = false;
          $scope.invoiceModel = {
   	            name: null,
@@ -194,13 +222,14 @@
          
          
          $scope.productTypes = [];
-         $scope.productName = "";
+ $scope.productName = "";
          
          $http({method : "GET",
     		   url :"/stocks/getStocksType", 
     		 
     		   headers : {
-    			'Content-Type' : 'application/json'   
+    			'Content-Type' : 'application/json',
+    			'token' :$localstorage.get("token", "")
     		   }
     		   }
     		   ).success(function (response) {
@@ -238,14 +267,15 @@
   		   url :"/stocks/getStocksbyType/"+type, 
   		 
   		   headers : {
-  			'Content-Type' : 'application/json'   
+  			'Content-Type' : 'application/json' ,
+  			'token' :$localstorage.get("token", "")
   		   }
   		   }
   		   ).success(function (response) {
   				 
   		
   			 // if (response.statusMessage == 'success') {
-  			   $scope.stocks = response;
+  			   $scope.stocks = response.stockModelList;
   			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
   			//   $('#successMsg').show();
   			 //  } 
@@ -352,22 +382,31 @@ $scope.createInvoice = function(invoiceModel) {
 		  		   data : invoiceModel,
 		  		 
 		  		   headers : {
-		  			'Content-Type' : 'application/json'   
+		  			'Content-Type' : 'application/json',
+		  			'token' :$localstorage.get("token", "")
 		  		   }
 		  		   }
 		  		   ).success(function (response) {
-		  				 
-		  		
-		  			 if (response.status == 'success') {
-		  			//   $scope.stocks = response;
-		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
-		  			//   $('#successMsg').show();
-		  			
-		  			$scope.isDisabled = true;
-		  			$scope.invoiceModel = response.response;
-		  			  } 
+		  			 if (response.error != null) {
+							$localstorage.set("token", "");
+							$rootScope.name = '';
+							$rootScope.authenicated = false;
+							
+							$rootScope.isError= true;
+							$rootScope.errorCode=
+									response.error.errorCode;
+							$rootScope.errorMessage=
+								response.error.errorMessage;
+						
+
+						} else {
+							$scope.isDisabled = true;
+				  			$scope.invoiceModel = response.response;
+						}
+		  		 
 		  			   
 		  		   }).error(function(error, status){
+		  			 $rootScope.systemError = true;
 		  			  
 		  				//   $('#errorMsg').show();
 		  		   });
@@ -445,14 +484,15 @@ $scope.createInvoice = function(invoiceModel) {
   		  		   data : customerModel,
   		  		 
   		  		   headers : {
-  		  			'Content-Type' : 'application/json'   
+  		  			'Content-Type' : 'application/json' ,
+  		  		'token' :$localstorage.get("token", "")
   		  		   }
   		  		   }
   		  		   ).success(function (response) {
   		  		     
   		  		       
   		  		       
-  		  				 if (response.length >= 1)
+  		  				 if (response.customerModelList.length >= 1)
   		  		 	{
   		  					 $scope.invoiceModel.name = response[0].name;
   		  					$scope.invoiceModel.email = response[0].email; 
@@ -482,22 +522,23 @@ $scope.createInvoice = function(invoiceModel) {
  
       
       mainApp.controller('UpdateStockController',['$scope', '$modal', '$log', '$http',
-
-  	    function ($scope, $modal, $log, $http) {
+	'$localstorage',
+  	    function ($scope, $modal, $log, $http, $localstorage) {
     	   $scope.productTypes = [];
            
            $http({method : "GET",
       		   url :"/stocks/getStocksType", 
       		 
       		   headers : {
-      			'Content-Type' : 'application/json'   
+      			'Content-Type' : 'application/json' ,
+      			'token' :$localstorage.get("token", "")
       		   }
       		   }
       		   ).success(function (response) {
       				 
       		
       			 // if (response.statusMessage == 'success') {
-      			   $scope.productTypes = response;
+      			   $scope.productTypes = response.stockModelList;
 
       			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
       			//   $('#successMsg').show();
@@ -522,7 +563,8 @@ $scope.createInvoice = function(invoiceModel) {
   		   url :"/stocks/getStocksbyType/"+type, 
   		 
   		   headers : {
-  			'Content-Type' : 'application/json'   
+  			'Content-Type' : 'application/json'  ,
+  			'token' :$localstorage.get("token", "")
   		   }
   		   }
   		   ).success(function (response) {
@@ -551,7 +593,8 @@ $scope.createInvoice = function(invoiceModel) {
 		  		   data : stockModel,
 		  		 
 		  		   headers : {
-		  			'Content-Type' : 'application/json'   
+		  			'Content-Type' : 'application/json' ,
+		  			'token' :$localstorage.get("token", "")
 		  		   }
 		  		   }
 		  		   ).success(function (response) {
@@ -581,7 +624,8 @@ $scope.createInvoice = function(invoiceModel) {
 	            $http({method : "GET",
 			  		   url :"/stocks/getStocksbyId/"+productId,
 			  		   headers : {
-			  			'Content-Type' : 'application/json'   
+			  			'Content-Type' : 'application/json'   ,
+			  			'token' :$localstorage.get("token", "")
 			  		   }
 			  		   }
 			  		   ).success(function (response) {
@@ -628,7 +672,8 @@ $scope.createInvoice = function(invoiceModel) {
  		  		   data : stockModel,
  		  		 
  		  		   headers : {
- 		  			'Content-Type' : 'application/json'   
+ 		  			'Content-Type' : 'application/json'  ,
+ 		  			'token' :$localstorage.get("token", "")
  		  		   }
  		  		   }
  		  		   ).success(function (response) {
@@ -652,7 +697,7 @@ $scope.createInvoice = function(invoiceModel) {
        });
       
       
-      mainApp.controller('TaskController', function($scope, $http) {
+      mainApp.controller('TaskController', function($scope, $http, $localstorage) {
           $scope.isDisabled = false;
           
           $scope.taskModel = {};
@@ -672,7 +717,8 @@ $scope.createInvoice = function(invoiceModel) {
  		  		   data : taskModel,
  		  		 
  		  		   headers : {
- 		  			'Content-Type' : 'application/json'   
+ 		  			'Content-Type' : 'application/json'  ,
+ 		  			'token' :$localstorage.get("token", "")
  		  		   }
  		  		   }
  		  		   ).success(function (response) {
@@ -683,7 +729,7 @@ $scope.createInvoice = function(invoiceModel) {
  		  			//   $('#successMsg').show();
  		  			
  		  		
- 		  			$scope.taskList = response;
+ 		  			$scope.taskList = response.taskModelList;
  		  		 $scope.taskModel = {};
  		  			//  } 
  		  			   
@@ -703,7 +749,8 @@ $scope.createInvoice = function(invoiceModel) {
   		  		   data : taskModel,
   		  		 
   		  		   headers : {
-  		  			'Content-Type' : 'application/json'   
+  		  			'Content-Type' : 'application/json' ,
+  		  		'token' :$localstorage.get("token", "")
   		  		   }
   		  		   }
   		  		   ).success(function (response) {
@@ -775,7 +822,7 @@ $scope.createInvoice = function(invoiceModel) {
      		   }
      		   }
      		   ).success(function (response) {
-     			  $scope.loading = false;
+     			//  $window.location.href = '/home.html';
      		
      			  $scope.balanceResponse = response.wallet;
      			   
@@ -788,38 +835,60 @@ $scope.createInvoice = function(invoiceModel) {
     	  
       });
       
- mainApp.controller('ViewInvoiceController', ['$scope', '$modal', '$log', '$http',
+ mainApp.controller('ViewInvoiceController', ['$scope', '$modal', '$log', '$http','$localstorage',
 
-	    function ($scope, $modal, $log, $http) {
+	    function ($scope, $modal, $log, $http,$localstorage) {
 	 
-	 
+	 $scope.filterCriteria = "name";
+	 $scope.searchBy="";
 	 $scope.invoiceList = [];
 	 
-	 $scope.getInvoicesByMonth = function(mmyy) {
-   	  
-      	 $http({method : "GET",
-		  		   url :"/invoices/getInvoicesByMonth/"+mmyy,
-		  		   headers : {
-		  			'Content-Type' : 'application/json'   
-		  		   }
-		  		   }
-		  		   ).success(function (response) {
-		  				 
-		  			
-		  			//   $scope.stocks = response;
-		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
-		  			//   $('#successMsg').show();
-		  				 $scope.invoiceList = response;
-		  		
-		  		
-		  			   
-		  		   }).error(function(error, status){
-		  			  
-		  				//   $('#errorMsg').show();
-		  		   });
-      	 
+	 $scope.clearSearch = function(){
+		 
+		 $scope.searchInvoice={};
+		  $scope.invoiceList = [];
+		   $scope.searchBy="";
+		   $scope.filterCriteria = "name";
+	
+		 
+	 }; 
+	 
+	 $scope.getInvoicesByMonth = function(yymm) {
+		   $scope.filterCriteria = "invoiceId";
+		      $scope.searchBy=yymm;
+	   	  
+      
+    	 
       	 
        };
+       
+       $scope.getInvoicesByYear = function(yy) {
+    	   $scope.searchInvoice.month="";
+    	   	  
+        	 $http({method : "GET",
+  		  		   url :"/invoices/getInvoicesByYear/"+yy,
+  		  		   headers : {
+  		  			'Content-Type' : 'application/json'  ,
+  		  		'token' :$localstorage.get("token", "")
+  		  		   }
+  		  		   }
+  		  		   ).success(function (response) {
+  		  				 
+  		  			
+  		  			//   $scope.stocks = response;
+  		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+  		  			//   $('#successMsg').show();
+  		  				 $scope.invoiceList = response.invoiceList;
+  		  		
+  		  		
+  		  			   
+  		  		   }).error(function(error, status){
+  		  			  
+  		  				//   $('#errorMsg').show();
+  		  		   });
+        	 
+        	 
+         };
 
 	        $scope.viewDetails = function (invoiceId, size) {
 	            $scope.invoiceModel = {}
@@ -829,7 +898,8 @@ $scope.createInvoice = function(invoiceModel) {
 	            $http({method : "GET",
 			  		   url :"/invoices/getInvoice/"+invoiceId,
 			  		   headers : {
-			  			'Content-Type' : 'application/json'   
+			  			'Content-Type' : 'application/json' ,
+			  			'token' :$localstorage.get("token", "")
 			  		   }
 			  		   }
 			  		   ).success(function (response) {
@@ -883,35 +953,46 @@ $scope.createInvoice = function(invoiceModel) {
          $modalInstance.dismiss('cancel');
      };
  };
+ 
+ mainApp.controller('ReportsController', function ($scope, $http) {
+	 
+    $scope.sendReport = function(reportModel) {
+ 	   $scope.responseMessage="";
+ 	   	  
+ 	  $http({method : "POST",
+ 		   url :"/reports/sendReport",
+ 		   data : reportModel,
+ 		 
+ 		   headers : {
+ 			'Content-Type' : 'application/json'  ,
+ 			'token' :$localstorage.get("token", "")
+ 		   }
+ 		   }
+ 		   ).success(function (response) {
+		  				 
+		  			
+		  			//   $scope.stocks = response;
+		  			//   $('#successMsg').text("Number of orders found:"+ response.orders.length);
+		  			//   $('#successMsg').show();
+		  				 $scope.responseMessage = response.responseMessage;
+		  		
+		  		
+		  			   
+		  		   }).error(function(error, status){
+		  			  
+		  			 $scope.responseMessage = 'Failed with:'+error+' and status='+status;
+		  				//   $('#errorMsg').show();
+		  		   });
+     	 
+     	 
+      };
+
+
+});
+
       
 </script>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#successMsg').hide();
-		$('#errorMsg').hide();
-		$('#addOrderBtn').click(function() {
-			var formdata = $("#addOrderForm").serialize();
-			jQuery.ajax({
-				url : "recordController",
-				type : "POST",
-				data : formdata,
-				success : function(data) {
-
-					$('#successMsg').html(data);
-					$('#successMsg').show();
-					$('#errorMsg').hide();
-					 $("#addOrderForm").trigger("reset");
-					
-				},
-				error : function(data){
-				$('#errorMsg').show();
-				$('#successMsg').hide();
-				}
-			});
-		});
-		
-
-	});
+	<script type="text/javascript">
 	
 
 	
@@ -920,9 +1001,111 @@ $scope.createInvoice = function(invoiceModel) {
 		  } );
 
 
-	
+	 mainApp.controller('LoginController', function($scope, $http,
+				$routeParams, $location, $localstorage, $rootScope) {
+
+			$rootScope.isError = false;
+			$rootScope.systemError = false;
+			$rootScope.errorCode = "";
+			$rootScope.errorMessage = "";
+
+			$scope.login = function(userModel) {
+				$http({
+					method : "POST",
+					url : "/users/login",
+					data : userModel,
+
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).success(function(response) {
+					if (response.error != null) {
+						$rootScope.isError = true;
+						$rootScope.errorCode = response.error.errorCode;
+						$rootScope.errorMessage = response.error.errorMessage;
+
+					}
+
+					if (response.token) {
+						$localstorage.set("token", response.token);
+						$localstorage.set("name", response.name);
+						$rootScope.isError = false;
+						$rootScope.systemError = false;
+						$rootScope.errorCode = "";
+						$rootScope.errorMessage = "";
+						$rootScope.name = response.name;
+						$rootScope.authenicated = true;
+						$rootScope.admin = response.role==='ADMIN'
+						$location.path('/getMessageBalance');
+					}
+
+				}).error(function(error, status) {
+			
+					$rootScope.isError = false;
+		
+					$rootScope.systemError = true;
+
+				});
+			};
+
+		});
+
+		mainApp.controller('LogoffController', function($scope, $http,
+				$routeParams, $location, $localstorage, $rootScope) {
+
+			$http({
+				method : "POST",
+				url : "/users/logoff",
+				data : "",
+
+				headers : {
+					'Content-Type' : 'application/json',
+					'token' : $localstorage.get("token", "")
+				}
+			}).success(function(response, code) {
+				if (code == "200") {
+					$localstorage.set("token", "");
+					$rootScope.name = '';
+					$rootScope.authenicated = false;
+					$location.path('/login');
+
+				}
+
+			}).error(function(error, status) {
+
+			});
+
+		});
+
+		mainApp.factory('$localstorage', [ '$window', function($window) {
+			return {
+				set : function(key, value) {
+					$window.localStorage[key] = value;
+				},
+				get : function(key, defaultValue) {
+					return $window.localStorage[key] || defaultValue || false;
+				},
+				setObject : function(key, value) {
+					$window.localStorage[key] = JSON.stringify(value);
+				},
+				getObject : function(key, defaultValue) {
+					if ($window.localStorage[key] != undefined) {
+						return JSON.parse($window.localStorage[key]);
+					} else {
+						return defaultValue || false;
+					}
+				},
+				remove : function(key) {
+					$window.localStorage.removeItem(key);
+				},
+				clear : function() {
+					$window.localStorage.clear();
+				}
+			}
+		} ]);
+
 	
 </script>
 
-  </body>
+</body>
 </html>

@@ -1,6 +1,6 @@
 package com.amaropticals.model;
 
-public class CreateInvoiceResponse extends CommonResponse {
+public class CreateInvoiceResponse extends CommonResponseModel {
 	private CreateInvoiceRequest response;
 
 	public CreateInvoiceRequest getResponse() {

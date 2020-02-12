@@ -2,7 +2,7 @@ package com.amaropticals.model;
 
 import java.util.List;
 
-public class StockModel {
+public class StockModel extends CommonResponseModel {
 	
 	private int productId;
 	private String productType;

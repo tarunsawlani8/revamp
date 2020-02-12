@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="invoice")
-public class CreateInvoiceRequest {
+public class CreateInvoiceRequest extends CommonResponseModel {
 
 	
 	private long invoiceId;

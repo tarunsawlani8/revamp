@@ -1,11 +1,15 @@
 package com.amaropticals.common;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.mail.BodyPart;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -14,11 +18,14 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.xml.transform.TransformerException;
 
+import org.apache.fop.apps.FOPException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.amaropticals.model.CreateInvoiceRequest;
+import com.amaropticals.model.ReportModel;
 import com.sun.istack.ByteArrayDataSource;
 
 public class MailUtils {
@@ -29,6 +36,24 @@ public class MailUtils {
 	private static final String password = "$Rajeshnisha8$";// change accordingly
 
 	private static Properties props = null;
+	private static Map<String, String> monthMap = null;
+
+	static {
+		monthMap = new HashMap<String, String>();
+		monthMap.put("01", "Jan");
+		monthMap.put("02", "Feb");
+		monthMap.put("03", "Mar");
+		monthMap.put("04", "Apr");
+		monthMap.put("05", "May");
+		monthMap.put("06", "Jun");
+		monthMap.put("07", "Jul");
+		monthMap.put("08", "Aug");
+		monthMap.put("09", "Sep");
+		monthMap.put("10", "Oct");
+		monthMap.put("11", "Nov");
+		monthMap.put("12", "Dec");
+
+	}
 
 	private static void loadProperties() {
 
@@ -36,8 +61,9 @@ public class MailUtils {
 		if (props == null) {
 			props = new Properties();
 			props.put("mail.smtp.host", host);
-		//	props.put("mail.smtp.socketFactory.port", "465"); // SSL Port
-		//	props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); // SSL Factory Class
+			// props.put("mail.smtp.socketFactory.port", "465"); // SSL Port
+			// props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+			// // SSL Factory Class
 			props.put("mail.smtp.auth", "true"); // Enabling SMTP Authentication
 			props.put("mail.smtp.port", "587"); // SMTP Port
 		}
@@ -55,37 +81,57 @@ public class MailUtils {
 
 	}
 
-	public static void sendMail(String toAddress, String subject, CreateInvoiceRequest request) {
+	public static void sendMail(String toAddress, String subject, Object... request) {
 
 		try {
 			MimeMessage message = new MimeMessage(getSession());
-			message.setFrom(new InternetAddress(user));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(toAddress));
-			message.setSubject(subject);
-			BodyPart messageBodyPart1 = new MimeBodyPart();
-			StringBuilder messageBody = new StringBuilder();
-			messageBody.append("Hello " + request.getName() + ",");
-			messageBody.append(
-					"\nPlease find the attached receipt of your purchase.Do provide us the opportunity to serve you again.\n\nWarm Regards,\nAmar Opticals,\nNear Pushpak Electronics,\nT.P.Nagar, Korba\nPh:7067979795");
-			messageBodyPart1.setText(messageBody.toString());
 
-			// 4) create new MimeBodyPart object and set DataHandler object to this object
-			MimeBodyPart messageBodyPart2 = new MimeBodyPart();
-
-			String filename = request.getInvoiceId() + ".pdf";// change accordingly
-			PDFUtils n = new PDFUtils();
-			DataSource source = null;
-
-			source = new ByteArrayDataSource(n.convertToPDF(request), "application/pdf");
-
-			messageBodyPart2.setDataHandler(new DataHandler(source));
-			messageBodyPart2.setFileName(filename);
-
-			// 5) create Multipart object and add MimeBodyPart objects to this object
 			Multipart multipart = new MimeMultipart();
-			multipart.addBodyPart(messageBodyPart1);
-			multipart.addBodyPart(messageBodyPart2);
 
+			if (request[0] instanceof CreateInvoiceRequest) {
+				CreateInvoiceRequest createInvoiceRequest = (CreateInvoiceRequest) request[0];
+				message.setFrom(new InternetAddress(user));
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress(toAddress));
+				message.setSubject(subject);
+
+				StringBuilder messageBody = new StringBuilder();
+				messageBody.append("Hello " + createInvoiceRequest.getName() + ",");
+				messageBody.append(
+						"\nPlease find the attached receipt of your purchase.Do provide us the opportunity to serve you again.\n\nWarm Regards,\nAmar Opticals,\nNear Pushpak Electronics,\nT.P.Nagar, Korba\nPh:7067979795");
+
+				BodyPart messageBodyPart1 = new MimeBodyPart();
+				messageBodyPart1.setText(messageBody.toString());
+
+				// 4) create new MimeBodyPart object and set DataHandler object to this object
+
+				// 5) create Multipart object and add MimeBodyPart objects to this object
+
+				multipart.addBodyPart(messageBodyPart1);
+				multipart.addBodyPart(createPdfAttachment(createInvoiceRequest));
+			} else if (request[0] instanceof ReportModel) {
+
+				ReportModel reportModel = (ReportModel) request[0];
+				message.setFrom(new InternetAddress(user));
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress(toAddress));
+				message.setSubject("Sales summary :"+monthMap.get(reportModel.getMonth())+" "+reportModel.getYear());
+
+				StringBuilder messageBody = new StringBuilder();
+				messageBody.append("Hello,");
+				messageBody.append("\nPlease find Report for the month of "+monthMap.get(reportModel.getMonth())+" "+reportModel.getYear());
+				messageBody.append("\n Total Sales Amount :"+ (String)request[1]);
+				messageBody.append("\n Total Customers :"+ (String)request[2]);
+				messageBody.append("\n Average Sales per customer :"+ (String)request[3]);
+				
+				BodyPart messageBodyPart1 = new MimeBodyPart();
+				messageBodyPart1.setText(messageBody.toString());
+
+				// 4) create new MimeBodyPart object and set DataHandler object to this object
+
+				// 5) create Multipart object and add MimeBodyPart objects to this object
+
+				multipart.addBodyPart(messageBodyPart1);
+
+			}
 			// 6) set the multiplart object to the message object
 			message.setContent(multipart);
 
@@ -93,13 +139,26 @@ public class MailUtils {
 			Transport.send(message);
 
 			LOGGER.info("Mail sent successfully to={}", toAddress);
-		
 
 		} catch (Exception e) {
 			LOGGER.error("Can't send mail to={}, due to exception={}", toAddress, e);
 
 		}
+	}
 
+	private static MimeBodyPart createPdfAttachment(CreateInvoiceRequest createInvoiceRequest)
+			throws MessagingException, FOPException, IOException, TransformerException {
+
+		String filename = createInvoiceRequest.getInvoiceId() + ".pdf";// change accordingly
+		PDFUtils pdfUtils = new PDFUtils();
+		DataSource source = null;
+
+		source = new ByteArrayDataSource(pdfUtils.convertToPDF(createInvoiceRequest), "application/pdf");
+		MimeBodyPart messageBodyPart2 = new MimeBodyPart();
+		messageBodyPart2.setDataHandler(new DataHandler(source));
+		messageBodyPart2.setFileName(filename);
+
+		return messageBodyPart2;
 	}
 
 }
